@@ -8,19 +8,30 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TeleDrive extends CommandBase {
+  private final DriveTrain teleDrive;
+
+
   /**
    * Creates a new TeleDrive.
+   * @param driveTrain
    */
-  public TeleDrive() {
+  
+  
+
+  public TeleDrive(DriveTrain driveTrain) {
+    teleDrive = driveTrain;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(teleDrive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    teleDrive.arcadeDriveControl(speed, rotation, squareInputs);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
