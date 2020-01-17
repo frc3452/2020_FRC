@@ -37,6 +37,7 @@ public class TeleDrive extends CommandBase {
   @Override
   public void execute() {
     teleDrive.arcadeDriveControl(speed, rotation, squareInputs);
+    // inputs will be from the controller
   }
 
   // Called once the command ends or is interrupted.
