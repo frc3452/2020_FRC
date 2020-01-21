@@ -22,6 +22,7 @@ public class DriveForTime extends CommandBase {
 
   private double move;
 
+
   /**
    * Creates a new DriveForTime.
    */
