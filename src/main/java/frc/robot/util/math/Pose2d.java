@@ -1,4 +1,4 @@
-package frc.robot.temporary;
+package frc.robot.util.math;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,9 @@ import java.util.List;
  */
 public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
     private static final Pose2d kIdentity = new Pose2d();
-    private final static double kEps = 1E-9;
     private final Translation2d translation_;
+
+    private final static double kEps = 1E-9;
     private final Rotation2d rotation_;
 
     public Pose2d(final Pose2d pose, double angle) {
@@ -25,12 +26,12 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
     }
 
 
-    public Pose2d(final Translation2d translation2d, double angleDeg) {
-        this(translation2d, new Rotation2d(angleDeg));
-    }
-
     public Pose2d(double x, double y) {
         this(x, y, new Rotation2d());
+    }
+
+    public Pose2d(final Translation2d translation2d, double angleDeg) {
+        this(translation2d, new Rotation2d(angleDeg));
     }
 
     public Pose2d(final Translation2d translation) {
@@ -330,6 +331,17 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         return this;
     }
 
+    @Override
+    public Pose2d mirror() {
+        return new Pose2d(getTranslation().mirror(), getRotation().inverse());
+    }
+
+    public Pose2d get(boolean left) {
+        if (left)
+            return this;
+        return mirror();
+    }
+
     public Pose2d transformBy(final Translation2d other) {
         return new Pose2d(getTranslation().translateBy(other), getRotation());
     }
@@ -353,22 +365,6 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         return new Pose2d(end, getRotation());
     }
 
-    private boolean epsilonEquals(final Pose2d other, double epsilon) {
-        return getTranslation().epsilonEquals(other.getTranslation(), epsilon)
-                && getRotation().isParallel(other.getRotation());
-    }
-
-    @Override
-    public Pose2d mirror() {
-        return new Pose2d(getTranslation().mirror(), getRotation().inverse());
-    }
-
-    public Pose2d get(boolean left) {
-        if (left)
-            return this;
-        return mirror();
-    }
-
     public boolean hasPointInFOV(final double fieldOfViewDeg, Translation2d other) {
         Rotation2d angleBetweenHereAndThere = getTranslation().getAngle(other);
 
@@ -388,6 +384,11 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
 
         Translation2d skew = newR.translateBy(newL.inverse());
         return skew;
+    }
+
+    private boolean epsilonEquals(final Pose2d other, double epsilon) {
+        return getTranslation().epsilonEquals(other.getTranslation(), epsilon)
+                && getRotation().isParallel(other.getRotation());
     }
 
 }

@@ -1,4 +1,4 @@
-package frc.robot.temporary;
+package frc.robot.util.math;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -164,8 +164,8 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         return rotateAround(this, rotateAround, rotation);
     }
 
-    public static ArrayList<Translation2d> getEmptyList() {
-        return new ArrayList<Translation2d>();
+    public static double cross(final Translation2d a, final Translation2d b) {
+        return a.x_ * b.y_ - a.y_ * b.x_;
     }
 
     public Rotation2d direction() {
@@ -191,85 +191,6 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         return extrapolate(other, x);
     }
 
-    //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-    private static boolean onSegment(Translation2d p, Translation2d q, Translation2d r) {
-        return q.x() <= Math.max(p.x(), r.x()) && q.x() >= Math.min(p.x(), r.x()) &&
-                q.y() <= Math.max(p.y(), r.y()) && q.y() >= Math.min(p.y(), r.y());
-    }
-
-    public Translation2d scale(double s) {
-        return new Translation2d(x_ * s, y_ * s);
-    }
-
-    public boolean epsilonEquals(final Translation2d other, double epsilon) {
-        return GZUtil.epsilonEquals(x(), other.x(), epsilon) && GZUtil.epsilonEquals(y(), other.y(), epsilon);
-    }
-
-    @Override
-    public String toString() {
-        return toString(false);
-    }
-
-    //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-    private static int orientation(Translation2d p, Translation2d q, Translation2d r) {
-        // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
-        // for details of below formula.
-        int val = (int) ((q.y() - p.y()) * (r.x() - q.x()) -
-                (q.x() - p.x()) * (r.y() - q.y()));
-
-        if (val == 0) return 0; // colinear
-
-        return (val > 0) ? 1 : 2; // clock or counterclock wise
-    }
-
-    // The main function that returns true if line segment 'p1q1'
-    // and 'p2q2' intersect.
-    //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-    public static boolean intersects(Translation2d p1, Translation2d q1, Translation2d p2, Translation2d q2) {
-        // Find the four orientations needed for general and
-        // special cases
-        int o1 = orientation(p1, q1, p2);
-        int o2 = orientation(p1, q1, q2);
-        int o3 = orientation(p2, q2, p1);
-        int o4 = orientation(p2, q2, q1);
-
-        // General case
-        if (o1 != o2 && o3 != o4)
-            return true;
-
-        // Special Cases
-        // p1, q1 and p2 are colinear and p2 lies on segment p1q1
-        if (o1 == 0 && onSegment(p1, p2, q1)) return true;
-
-        // p1, q1 and q2 are colinear and q2 lies on segment p1q1
-        if (o2 == 0 && onSegment(p1, q2, q1)) return true;
-
-        // p2, q2 and p1 are colinear and p1 lies on segment p2q2
-        if (o3 == 0 && onSegment(p2, p1, q2)) return true;
-
-        // p2, q2 and q1 are colinear and q1 lies on segment p2q2
-        return o4 == 0 && onSegment(p2, q1, q2);// Doesn't fall in any of the above cases
-    }
-
-    public Translation2d translateBy(double distance, Rotation2d angle) {
-        return this.translateBy(Translation2d.fromPolar(angle, distance));
-    }
-
-    public Translation2d translateBy(double distance, double angle) {
-        return translateBy(distance, new Rotation2d(angle));
-    }
-
-    private Translation2d nearest(List<Translation2d> translations, double maxDistance) {
-        int index = nearestIndex(translations, maxDistance);
-        if (index == -1)
-            return null;
-        return translations.get(index);
-    }
-
-    public Translation2d rotateAroundOrigin(final Rotation2d rotation) {
-        return rotateAround(new Translation2d(), rotation);
-    }
-
     private int nearestIndex(List<Translation2d> translations, double maxDistance) {
         double minDistance = Double.POSITIVE_INFINITY;
         int minDistanceIndex = -1;
@@ -290,6 +211,28 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         return minDistanceIndex;
     }
 
+    public static ArrayList<Translation2d> getEmptyList() {
+        return new ArrayList<Translation2d>();
+    }
+
+    //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+    private static boolean onSegment(Translation2d p, Translation2d q, Translation2d r) {
+        return q.x() <= Math.max(p.x(), r.x()) && q.x() >= Math.min(p.x(), r.x()) &&
+                q.y() <= Math.max(p.y(), r.y()) && q.y() >= Math.min(p.y(), r.y());
+    }
+
+    //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+    private static int orientation(Translation2d p, Translation2d q, Translation2d r) {
+        // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
+        // for details of below formula.
+        int val = (int) ((q.y() - p.y()) * (r.x() - q.x()) -
+                (q.x() - p.x()) * (r.y() - q.y()));
+
+        if (val == 0) return 0; // colinear
+
+        return (val > 0) ? 1 : 2; // clock or counterclock wise
+    }
+
     private Translation2d extrapolate(final Translation2d other, double x) {
         return new Translation2d(x * (other.x_ - x_) + x_, x * (other.y_ - y_) + y_);
     }
@@ -299,10 +242,6 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         final DecimalFormat fmt = new DecimalFormat("#0.0000");
         return fmt.format(x_) + "," + fmt.format(y_);
 //        return x() + "," + y();
-    }
-
-    public boolean isWithinAngle(Translation2d A, Translation2d C) {
-        return isWithinAngle(A, C, false);
     }
 
     private String toString(boolean angle) {
@@ -363,17 +302,8 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         return v.normalize().scale(scal(v));
     }
 
-    public static double cross(final Translation2d a, final Translation2d b) {
-        return a.x_ * b.y_ - a.y_ * b.x_;
-    }
-
     public boolean isWithinAngle(Translation2d A, Translation2d B, Translation2d C) {
         return isWithinAngle(A, B, C, false);
-    }
-
-    @Override
-    public double distance(final Translation2d other) {
-        return inverse().translateBy(other).norm();
     }
 
     /**
@@ -405,16 +335,33 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         return Translation2d.dot(d, m) > Translation2d.dot(a, m);
     }
 
-    @Override
-    public boolean equals(final Object other) {
-        if (other == null || !(other instanceof Translation2d))
-            return false;
-        return distance((Translation2d) other) < GZUtil.kEpsilon;
-    }
+    // The main function that returns true if line segment 'p1q1'
+    // and 'p2q2' intersect.
+    //https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+    public static boolean intersects(Translation2d p1, Translation2d q1, Translation2d p2, Translation2d q2) {
+        // Find the four orientations needed for general and
+        // special cases
+        int o1 = orientation(p1, q1, p2);
+        int o2 = orientation(p1, q1, q2);
+        int o3 = orientation(p2, q2, p1);
+        int o4 = orientation(p2, q2, q1);
 
-    @Override
-    public Translation2d getTranslation() {
-        return this;
+        // General case
+        if (o1 != o2 && o3 != o4)
+            return true;
+
+        // Special Cases
+        // p1, q1 and p2 are colinear and p2 lies on segment p1q1
+        if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+
+        // p1, q1 and q2 are colinear and q2 lies on segment p1q1
+        if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+
+        // p2, q2 and p1 are colinear and p1 lies on segment p2q2
+        if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+
+        // p2, q2 and q1 are colinear and q1 lies on segment p2q2
+        return o4 == 0 && onSegment(p2, q1, q2);// Doesn't fall in any of the above cases
     }
 
     /**
@@ -424,8 +371,27 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         return isWithinAngle(A, identity(), C, vertical);
     }
 
+    public Translation2d translateBy(double distance, Rotation2d angle) {
+        return this.translateBy(Translation2d.fromPolar(angle, distance));
+    }
+
+    public Translation2d translateBy(double distance, double angle) {
+        return translateBy(distance, new Rotation2d(angle));
+    }
+
+    private Translation2d nearest(List<Translation2d> translations, double maxDistance) {
+        int index = nearestIndex(translations, maxDistance);
+        if (index == -1)
+            return null;
+        return translations.get(index);
+    }
+
     public Rotation2d getAngle(final Translation2d other) {
         return getAngle(this, other);
+    }
+
+    public Translation2d rotateAroundOrigin(final Rotation2d rotation) {
+        return rotateAround(new Translation2d(), rotation);
     }
 
     /**
@@ -446,8 +412,21 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         // Translation2d(a,b)).rotateBy(new Rotation2d(90))));
     }
 
+    public Translation2d scale(double s) {
+        return new Translation2d(x_ * s, y_ * s);
+    }
+
     public boolean equals(Translation2d other, double epsilon) {
         return distance(other) < epsilon;
+    }
+
+    public boolean epsilonEquals(final Translation2d other, double epsilon) {
+        return GZUtil.epsilonEquals(x(), other.x(), epsilon) && GZUtil.epsilonEquals(y(), other.y(), epsilon);
+    }
+
+    @Override
+    public String toString() {
+        return toString(false);
     }
 
     public Translation2d getFlipped() {
@@ -470,5 +449,26 @@ public class Translation2d extends GZGeometry<Translation2d> implements ITransla
         newY = (centerLine + (centerLine - y()));
 
         return new Translation2d(x(), newY);
+    }
+
+    public boolean isWithinAngle(Translation2d A, Translation2d C) {
+        return isWithinAngle(A, C, false);
+    }
+
+    @Override
+    public double distance(final Translation2d other) {
+        return inverse().translateBy(other).norm();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (other == null || !(other instanceof Translation2d))
+            return false;
+        return distance((Translation2d) other) < GZUtil.kEpsilon;
+    }
+
+    @Override
+    public Translation2d getTranslation() {
+        return this;
     }
 }

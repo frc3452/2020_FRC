@@ -1,4 +1,4 @@
-package frc.robot.temporary;
+package frc.robot.util.math;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -230,7 +230,6 @@ public class GZUtil {
             temp = new SimpleDateFormat("yyyy.MM.dd.HH.mm").format(new Date());
         return temp;
     }
-
 
     public static String getDate() {
         String ret;

@@ -1,10 +1,10 @@
-package frc.robot.temporary;
+package frc.robot.util.math;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static frc.robot.temporary.GZUtil.kEpsilon;
+import static frc.robot.util.math.GZUtil.kEpsilon;
 
 /**
  * A rotation in a 2d coordinate frame represented a point on the unit circle
@@ -12,7 +12,7 @@ import static frc.robot.temporary.GZUtil.kEpsilon;
  * <p>
  * Inspired by Sophus (https://github.com/strasdat/Sophus/tree/master/sophus)
  */
-public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Rotation2d> {
+public class Rotation2d implements IRotation2d<Rotation2d> {
     private static final Rotation2d kIdentity = new Rotation2d();
     private final double cos_angle_;
     private final double sin_angle_;
