@@ -8,13 +8,16 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveForTime;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,14 +27,15 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+
+
 
   
   private final DriveTrain m_DriveTrain = new DriveTrain();
 
-  //     private final DriveForTime exampleCommand = new DriveForTime(m_DriveTrain);
+  // private final DriveForTime exampleCommand = new DriveForTime(m_DriveTrain);
   // MORE ARGUMENTS NEEDED!!  ^
 
   /**
@@ -49,6 +53,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    final Joystick driverJoystick = new Joystick(0); // Creates a joystick on port 0
+    XboxController driverController = new XboxController(0); // Creates an XboxController on port 0.
+    JoystickButton exampleButton = new JoystickButton(driverJoystick, 9); 
   }
 
 
