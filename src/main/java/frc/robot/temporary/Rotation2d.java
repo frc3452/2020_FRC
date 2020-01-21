@@ -1,7 +1,5 @@
 package frc.robot.temporary;
 
-import frc.robot.temporary.GZUtil;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +13,13 @@ import static frc.robot.temporary.GZUtil.kEpsilon;
  * Inspired by Sophus (https://github.com/strasdat/Sophus/tree/master/sophus)
  */
 public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Rotation2d> {
-    protected static final Rotation2d kIdentity = new Rotation2d();
+    private static final Rotation2d kIdentity = new Rotation2d();
+    private final double cos_angle_;
+    private final double sin_angle_;
 
-    public static final Rotation2d identity() {
+    public static Rotation2d identity() {
         return kIdentity;
     }
-
-    protected final double cos_angle_;
-    protected final double sin_angle_;
-    protected double theta_degrees = 0;
-    protected double theta_radians = 0;
 
     public Rotation2d() {
         this(1, 0, false);
@@ -47,7 +42,6 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
             cos_angle_ = x;
             sin_angle_ = y;
         }
-        theta_degrees = Math.toDegrees(Math.atan2(sin_angle_, cos_angle_));
     }
 
     public int quadrant() {
@@ -67,13 +61,11 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
     public Rotation2d(final Rotation2d other) {
         cos_angle_ = other.cos_angle_;
         sin_angle_ = other.sin_angle_;
-        theta_degrees = Math.toDegrees(Math.atan2(sin_angle_, cos_angle_));
     }
 
     public Rotation2d(double theta_degrees) {
         cos_angle_ = Math.cos(Math.toRadians(theta_degrees));
         sin_angle_ = Math.sin(Math.toRadians(theta_degrees));
-        this.theta_degrees = theta_degrees;
     }
 
     public Rotation2d(final Translation2d direction, boolean normalize) {
@@ -115,25 +107,27 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return Math.toDegrees(getRadians());
     }
 
-    public double getUnboundedDegrees() {
-        return theta_degrees;
+    public static ArrayList<Translation2d> getListToTranslations(double... angles) {
+        ArrayList<Translation2d> ret = new ArrayList<>();
+        for (double d : angles) {
+            ret.add(new Rotation2d(d).toTranslation());
+        }
+        return ret;
     }
 
-    /**
-     * We can rotate this Rotation2d by adding together the effects of it and
-     * another rotation.
-     *
-     * @param other The other rotation. See:
-     *              https://en.wikipedia.org/wiki/Rotation_matrix
-     * @return This rotation rotated by other.
-     */
-    public Rotation2d rotateBy(final Rotation2d other) {
-        return new Rotation2d(cos_angle_ * other.cos_angle_ - sin_angle_ * other.sin_angle_,
-                cos_angle_ * other.sin_angle_ + sin_angle_ * other.cos_angle_, true);
+    private static ArrayList<Rotation2d> getList(double... angles) {
+        ArrayList<Rotation2d> ret = new ArrayList<>();
+        for (double d : angles)
+            ret.add(Rotation2d.fromDegrees(d));
+        return ret;
     }
 
     public Rotation2d normal() {
         return new Rotation2d(-sin_angle_, cos_angle_, false);
+    }
+
+    private static ArrayList<Rotation2d> getCardinalsPlus() {
+        return getList(0, 45, 90, 135, 180, 225, 270, 315);
     }
 
     /**
@@ -201,23 +195,30 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return Math.toDegrees(distance(other));
     }
 
-    @Override
-    public boolean equals(final Object other) {
-//        if (other == null) {
-//            return false;
-//        }
-//
-//        if (other instanceof Translation2d) {
-//            Translation2d _other = (Translation2d) other;
-//            return _other.direction().equals(this);
-//        } else if (!(other instanceof Rotation2d)) {
-//            return false;
-//        }
-//        return distance((Rotation2d) other) < kEpsilon;
+    private static double difference(double a1, double a2) {
+        double angle = 180 - Math.abs(Math.abs(a1 - a2) - 180);
+        return angle;
+    }
 
-        if (other == null || !(other instanceof Rotation2d))
-            return false;
-        return distance((Rotation2d) other) < GZUtil.kEpsilon;
+    private static boolean shouldTurnClockwise(Rotation2d current, Rotation2d target) {
+        double tar = target.getNormalDegrees();
+        double cur = current.getNormalDegrees();
+        boolean cw;
+        if (tar < 180) {
+            cw = GZUtil.between(cur, tar + 180, 360) || GZUtil.between(cur, 0, tar);
+        } else {
+            cw = !GZUtil.between(cur, tar, 360) && !GZUtil.between(cur, 0, tar - 180);
+        }
+        // We useed to have a DUMB coordinate system, but we're smart now
+        // this works, leave it
+        return !cw;
+    }
+
+    public static boolean between(Rotation2d value, Rotation2d lowBound, Rotation2d highBound) {
+        double n = value.getNormalDegrees();
+        double l = lowBound.getNormalDegrees();
+        double h = highBound.getNormalDegrees();
+        return n >= l && n <= h;
     }
 
     @Override
@@ -229,11 +230,23 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return difference(this.getDegrees(), other.getDegrees());
     }
 
-    public static ArrayList<Rotation2d> getList(double... angles) {
-        ArrayList<Rotation2d> ret = new ArrayList<>();
-        for (double d : angles)
-            ret.add(Rotation2d.fromDegrees(d));
-        return ret;
+    /**
+     * We can rotate this Rotation2d by adding together the effects of it and
+     * another rotation.
+     *
+     * @param other The other rotation. See:
+     *              https://en.wikipedia.org/wiki/Rotation_matrix
+     * @return This rotation rotated by other.
+     */
+    public Rotation2d rotateBy(final Rotation2d other) {
+        //can i get a
+//        double newRad = getRadians() + other.getRadians();
+//        double newCosine = Math.cos(newRad);
+//        double newSin = Math.sin(newRad);
+//        return new Rotation2d(newCosine, newSin, true);
+
+        return new Rotation2d(cos_angle_ * other.cos_angle_ - sin_angle_ * other.sin_angle_,
+                cos_angle_ * other.sin_angle_ + sin_angle_ * other.cos_angle_, true);
     }
 
     public static ArrayList<Translation2d> getListToTranslations(ArrayList<Rotation2d> angles) {
@@ -244,20 +257,16 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return ret;
     }
 
-    public static ArrayList<Translation2d> getListToTranslations(double... angles) {
-        ArrayList<Translation2d> ret = new ArrayList<>();
-        for (double d : angles) {
-            ret.add(new Rotation2d(d).toTranslation());
-        }
-        return ret;
+    public Rotation2d rotateBy(double other) {
+        return rotateBy(new Rotation2d(other));
     }
 
     public static ArrayList<Rotation2d> getCardinals() {
         return getList(0, 90, 180, 270);
     }
 
-    public static ArrayList<Rotation2d> getCardinalsPlus() {
-        return getList(0, 45, 90, 135, 180, 225, 270, 315);
+    public Rotation2d normal2() {
+        return new Rotation2d(-cos_angle_, sin_angle_, false);
     }
 
     public static ArrayList<Rotation2d> getInterCardinalds() {
@@ -273,29 +282,35 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return newList;
     }
 
+    public boolean equals(final Rotation2d other, double epsilon) {
+        return Math.abs(distanceDeg(other)) < epsilon;
+    }
+
     public static double difference(Rotation2d a1, Rotation2d a2) {
         return difference(a1.getDegrees(), a2.getDegrees());
     }
 
-    public static double difference(double a1, double a2) {
-        double angle = 180 - Math.abs(Math.abs(a1 - a2) - 180);
-        return angle;
+    public boolean equals(final double other) {
+        return equals(new Rotation2d(other));
     }
 
     public Rotation2d nearestCardinalPlus() {
         return this.nearest(getCardinalsPlus());
     }
 
-    public Rotation2d nearest(List<Rotation2d> rotations) {
-        return nearest(rotations, Double.POSITIVE_INFINITY);
+    @Override
+    public boolean equals(final Object other) {
+        if (!(other instanceof Rotation2d))
+            return false;
+
+        double distance = distance((Rotation2d) other);
+        distance = Math.abs(distance);
+        return distance < kEpsilon;
     }
 
-    public Rotation2d nearest(List<Rotation2d> rotations, double maxDistance) {
-        int index = nearestIndex(rotations, maxDistance);
-
-        if (index == -1)
-            return null;
-        return rotations.get(index);
+    public boolean near(Rotation2d rotation, double epsilon) {
+        double difference = difference(rotation);
+        return difference <= epsilon;
     }
 
     public Pose2d nearestPoseByAngle(List<Pose2d> poses, double maxTolerance) {
@@ -309,10 +324,37 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return poses.get(index);
     }
 
+    public Rotation2d findMiddle(final Rotation2d other) {
+        if (equals(other)) {
+            return this;
+        }
+
+        double max, min;
+        var a = getNormalDegrees();
+        var b = other.getNormalDegrees();
+
+        if (a > b) {
+            max = a;
+            min = b;
+        } else {
+            max = b;
+            min = a;
+        }
+
+        double middle = ((max - min) / 2.0) + min;
+
+        return new Rotation2d(middle);
+    }
+
+    public Rotation2d getDifference(final Rotation2d other) {
+        Rotation2d difference = inverse().rotateBy(other);
+        return difference;
+    }
+
+
     public int nearestIndex(List<Rotation2d> rotations, double maxDistance) {
         double minDistance = Double.POSITIVE_INFINITY;
         int minDistanceIndex = -1;
-        // System.out.println("Rotations: " + rotations.size());
         for (int i = 0; i < rotations.size(); i++) {
             Rotation2d t = rotations.get(i);
             double distance = Math.abs(t.distanceDeg(this));
@@ -320,9 +362,6 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
             if (distance > maxDistance) {
                 distance = Double.POSITIVE_INFINITY;
             }
-            // System.out.println("Rotation " + i + ": " + t.toString() + "\tDistance: " +
-            // distance);
-
             if (distance < minDistance) {
                 minDistance = distance;
                 minDistanceIndex = i;
@@ -332,33 +371,16 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
         return minDistanceIndex;
     }
 
-    public static boolean between(Rotation2d value, Rotation2d lowBound, Rotation2d highBound) {
-        double n = value.getNormalDegrees();
-        double l = lowBound.getNormalDegrees();
-        double h = highBound.getNormalDegrees();
-        if (n >= l && n <= h)
-            return true;
-        return false;
+    private Rotation2d nearest(List<Rotation2d> rotations) {
+        return nearest(rotations, Double.POSITIVE_INFINITY);
     }
 
-    public static boolean shouldTurnClockwise(Rotation2d current, Rotation2d target) {
-        double tar = target.getNormalDegrees();
-        double cur = current.getNormalDegrees();
-        boolean cw;
-        if (tar < 180) {
-            if (GZUtil.between(cur, tar + 180, 360) || GZUtil.between(cur, 0, tar)) {
-                cw = true;
-            } else {
-                cw = false;
-            }
-        } else {
-            if (GZUtil.between(cur, tar, 360) || GZUtil.between(cur, 0, tar - 180)) {
-                cw = false;
-            } else {
-                cw = true;
-            }
-        }
-        return cw;
+    private Rotation2d nearest(List<Rotation2d> rotations, double maxDistance) {
+        int index = nearestIndex(rotations, maxDistance);
+
+        if (index == -1)
+            return null;
+        return rotations.get(index);
     }
 
     public boolean shouldTurnClockWiseToGetTo(Rotation2d target) {
@@ -378,14 +400,5 @@ public class Rotation2d extends GZGeometry<Rotation2d> implements IRotation2d<Ro
     public double getNormalDegrees() {
         double ang = getDegrees();
         return getNormalDegrees(ang);
-    }
-
-    public Rotation2d print() {
-        return print("");
-    }
-
-    public Rotation2d print(String message) {
-        System.out.println(message + " " + this);
-        return this;
     }
 }

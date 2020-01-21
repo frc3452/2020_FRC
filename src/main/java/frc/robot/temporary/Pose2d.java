@@ -3,8 +3,6 @@ package frc.robot.temporary;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.temporary.GZUtil;
-
 /**
  * Represents a 2d pose (rigid transform) containing translational and
  * rotational elements.
@@ -12,20 +10,27 @@ import frc.robot.temporary.GZUtil;
  * Inspired by Sophus (https://github.com/strasdat/Sophus/tree/master/sophus)
  */
 public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
-    protected static final Pose2d kIdentity = new Pose2d();
-
-    public static final Pose2d identity() {
-        return kIdentity;
-    }
-
+    private static final Pose2d kIdentity = new Pose2d();
     private final static double kEps = 1E-9;
+    private final Translation2d translation_;
+    private final Rotation2d rotation_;
 
-    protected final Translation2d translation_;
-    protected final Rotation2d rotation_;
+    public Pose2d(final Pose2d pose, double angle) {
+        this(pose.getTranslation(), angle);
+    }
 
     public Pose2d() {
         translation_ = new Translation2d();
         rotation_ = new Rotation2d();
+    }
+
+
+    public Pose2d(final Translation2d translation2d, double angleDeg) {
+        this(translation2d, new Rotation2d(angleDeg));
+    }
+
+    public Pose2d(double x, double y) {
+        this(x, y, new Rotation2d());
     }
 
     public Pose2d(final Translation2d translation) {
@@ -44,6 +49,10 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         this(new Translation2d(), new Rotation2d(theta_degrees));
     }
 
+    public static Pose2d identity() {
+        return kIdentity;
+    }
+
     public Pose2d(double x, double y, final Rotation2d rotation) {
         translation_ = new Translation2d(x, y);
         rotation_ = rotation;
@@ -51,10 +60,6 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
 
     public Pose2d(double x, double y, double theta_degrees) {
         this(x, y, new Rotation2d(theta_degrees));
-    }
-
-    public Pose2d(double x1, double y1, double x2, double y2, double theta_degrees) {
-        this(new Translation2d(x1, y1, x2, y2), new Rotation2d(theta_degrees));
     }
 
     public Pose2d(final Translation2d translation, final Rotation2d rotation) {
@@ -133,31 +138,23 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         return poses.get(index);
     }
 
-    public Pose2d nearest(List<Pose2d> poses, double maxDistance) {
-        int index = nearestIndex(poses, maxDistance);
-        if (index == -1)
-            return null;
-        return poses.get(index);
+    public static ArrayList<Translation2d> getListToTranslation(List<Pose2d> list) {
+        var array = new ArrayList<Translation2d>();
+
+        for (Pose2d t : list)
+            array.add(t.getTranslation());
+
+        return array;
     }
 
-    public int nearestIndex(List<Pose2d> poses, double maxDistance) {
-        double minDistance = Double.POSITIVE_INFINITY;
-        int minDistanceIndex = -1;
-        for (int i = 0; i < poses.size(); i++) {
-            Translation2d t = poses.get(i).getTranslation();
-            double distance = t.distance(this.getTranslation());
+    public static ArrayList<Pose2d> translateAllBy(ArrayList<Pose2d> list, Translation2d here) {
+        var newList = getEmptyList();
 
-            if (distance > maxDistance) {
-                distance = Double.POSITIVE_INFINITY;
-            }
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                minDistanceIndex = i;
-            }
+        for (Pose2d p : list) {
+            newList.add(p.transformBy(here));
         }
 
-        return minDistanceIndex;
+        return newList;
     }
 
     public Pose2d nearest(List<Pose2d> translations) {
@@ -177,16 +174,36 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
                 rotation_.rotateBy(other.rotation_));
     }
 
-    /**
-     * Translates pose relative to the angle it is facing Pose2d at (1,1) 45°
-     * translated by (1,1) will yeild (2,2) 45°
-     * 
-     * @param translation
-     * @return translated pose
-     */
-    public Pose2d translateBy(final Translation2d translation) {
-        Translation2d t = getTranslation().translateBy(translation).rotateAround(this);
-        return new Pose2d(t, getRotation());
+    public static ArrayList<Pose2d> flipYInverseList(ArrayList<Pose2d> list) {
+        var newList = getEmptyList();
+
+        for (Pose2d p : list) {
+            newList.add(new Pose2d(p.getTranslation().getNegatedY(), p.getRotation().inverse()));
+        }
+
+        return newList;
+
+    }
+
+    public static ArrayList<Pose2d> mirrorList(ArrayList<Pose2d> list) {
+        var newList = getEmptyList();
+
+        for (Pose2d p : list) {
+            newList.add(p.mirror());
+        }
+
+        return newList;
+
+    }
+
+    public static ArrayList<Pose2d> getEmptyList() {
+        return new ArrayList<Pose2d>();
+    }
+
+    public static void main(String[] args) {
+        Translation2d center = new Translation2d(25, -6).interpolate(new Translation2d(19, -9), 0.5);
+        System.out.println(center);
+        System.out.println(center.direction());
     }
 
     /**
@@ -231,9 +248,11 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         return (GZUtil.epsilonEquals(twist.dy, 0.0) && GZUtil.epsilonEquals(twist.dtheta, 0.0));
     }
 
-    public boolean epsilonEquals(final Pose2d other, double epsilon) {
-        return getTranslation().epsilonEquals(other.getTranslation(), epsilon)
-                && getRotation().isParallel(other.getRotation());
+    private Pose2d nearest(List<Pose2d> poses, double maxDistance) {
+        int index = nearestIndex(poses, maxDistance);
+        if (index == -1)
+            return null;
+        return poses.get(index);
     }
 
     private static Translation2d intersectionInternal(final Pose2d a, final Pose2d b) {
@@ -279,6 +298,26 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         return Pose2d.log(inverse().transformBy(other)).norm();
     }
 
+    private int nearestIndex(List<Pose2d> poses, double maxDistance) {
+        double minDistance = Double.POSITIVE_INFINITY;
+        int minDistanceIndex = -1;
+        for (int i = 0; i < poses.size(); i++) {
+            Translation2d t = poses.get(i).getTranslation();
+            double distance = t.distance(this.getTranslation());
+
+            if (distance > maxDistance) {
+                distance = Double.POSITIVE_INFINITY;
+            }
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                minDistanceIndex = i;
+            }
+        }
+
+        return minDistanceIndex;
+    }
+
     @Override
     public boolean equals(final Object other) {
         if (other == null || !(other instanceof Pose2d))
@@ -291,8 +330,64 @@ public class Pose2d extends GZGeometry<Pose2d> implements IPose2d<Pose2d> {
         return this;
     }
 
+    public Pose2d transformBy(final Translation2d other) {
+        return new Pose2d(getTranslation().translateBy(other), getRotation());
+    }
+
+    public Pose2d transformBy(final Rotation2d other) {
+        return new Pose2d(getTranslation(), getRotation().rotateBy(other));
+    }
+
+    public Pose2d translateBy(double xComponent, double yComponent) {
+        return translateBy(new Translation2d(xComponent, yComponent));
+    }
+
+    /**
+     * @param translation
+     * @return translated pose
+     */
+    public Pose2d translateBy(final Translation2d translation) {
+        Translation2d newPoint = getTranslation().translateBy(translation);
+        Rotation2d rot = this.getRotation().rotateBy(new Rotation2d(-90));
+        Translation2d end = newPoint.rotateAround(this.getTranslation(), rot);
+        return new Pose2d(end, getRotation());
+    }
+
+    private boolean epsilonEquals(final Pose2d other, double epsilon) {
+        return getTranslation().epsilonEquals(other.getTranslation(), epsilon)
+                && getRotation().isParallel(other.getRotation());
+    }
+
     @Override
     public Pose2d mirror() {
-        return new Pose2d(new Translation2d(getTranslation().x(), -getTranslation().y()), getRotation().inverse());
+        return new Pose2d(getTranslation().mirror(), getRotation().inverse());
     }
+
+    public Pose2d get(boolean left) {
+        if (left)
+            return this;
+        return mirror();
+    }
+
+    public boolean hasPointInFOV(final double fieldOfViewDeg, Translation2d other) {
+        Rotation2d angleBetweenHereAndThere = getTranslation().getAngle(other);
+
+        final double distance = Math.abs(angleBetweenHereAndThere.distanceDeg(getRotation()));
+
+        return distance < fieldOfViewDeg || GZUtil.epsilonEquals(distance, fieldOfViewDeg);
+    }
+
+    public Translation2d getSkewWithRespectTo(Translation2d left, Translation2d right) {
+        Translation2d centerOfPoints = left.interpolate(right, 0.5);
+        Rotation2d hereToCenter = getTranslation().getFlipped().getAngle(centerOfPoints.getFlipped());
+
+        Pose2d pointToRotateAround = new Pose2d(getTranslation(), hereToCenter);
+
+        Translation2d newL = left.getTranslation().rotateAround(pointToRotateAround);
+        Translation2d newR = right.getTranslation().rotateAround(pointToRotateAround);
+
+        Translation2d skew = newR.translateBy(newL.inverse());
+        return skew;
+    }
+
 }
