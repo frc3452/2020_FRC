@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
     DifferentialDrive differentialDrive;
+
     /**
      * Creates a new DriveTrain.
      */
@@ -36,7 +37,6 @@ public class DriveTrain extends SubsystemBase {
 
         leftFollower1.follow(leftMaster);
         leftFollower2.follow(leftMaster);
-
         rightFollower1.follow(rightMaster);
         rightFollower2.follow(rightMaster);
 
