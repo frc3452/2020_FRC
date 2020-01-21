@@ -31,17 +31,22 @@ public class TeleDrive extends CommandBase {
     public void execute() {
         teleDrive.arcadeDriveControl(0.5, 0.0, false);
         // inputs will be from the controller
+        //How do we get them here? Look at DriveForTime. Pass the arguments through the constructor of the command,
+        // then store them locally to increase scope. then use arguments in CommandBase methods like 'execute()' to call
+        //methods on subsystems with those arguments.
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        //This looks good, we do want to stop it when we're done.
         teleDrive.arcadeDriveControl(0.0, 0.0, false);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        //Default, but also good. We don't have any stop conditions for this command
         return false;
     }
 }

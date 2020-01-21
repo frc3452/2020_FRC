@@ -8,8 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -22,16 +24,22 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
 
-//         private final DriveForTime exampleCommand = new DriveForTime(m_DriveTrain);
-    // MORE ARGUMENTS NEEDED!!  ^
-
+    //        https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
+    private Joystick driverJoystick = new Joystick(0);
+    private JoystickButton driverAButton = new JoystickButton(driverJoystick, 0);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // Configure the button bindings
+        configureDefaultCommands();
         configureButtonBindings();
+    }
+
+    private void configureDefaultCommands() {
+        //https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
+//        CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain, new TeleDrive());
     }
 
     /**
