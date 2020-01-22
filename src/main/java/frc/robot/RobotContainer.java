@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -29,7 +31,13 @@ public class RobotContainer {
 
     //        https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private Joystick driverJoystick = new Joystick(0);
+
+
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, 0);
+    private JoystickButton driverRightBumper = new JoystickButton(driverJoystick, 0);
+    private JoystickButton driverLeftBumper = new JoystickButton(driverJoystick, 0);
+
+    public Command drive = new TeleDrive(m_DriveTrain, driverJoystick.getThrottleChannel(), 0, false);
 
     //This can be defined inline (or in the configureDefaultSubsystems() method, but I'm doing it here so you can see each argument easier
 //    Supplier<Double> doubleSupplier = () -> driverJoystick.getRawAxis(1);
@@ -45,11 +53,12 @@ public class RobotContainer {
     }
 
     private void configureDefaultCommands() {
+        
         //https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
 //        CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain, new TeleDrive());
 
         //Example 1: default command for arm control (I smell something like DriveTele)
-//        CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem, armCommand);
+    //    CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem, armCommand);
     }
 
     /**

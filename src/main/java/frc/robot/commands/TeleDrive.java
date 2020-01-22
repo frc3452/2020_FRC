@@ -15,8 +15,17 @@ import frc.robot.subsystems.DriveTrain;
 public class TeleDrive extends CommandBase {
     private final DriveTrain teleDrive;
 
-    public TeleDrive(DriveTrain driveTrain) {
+    private double driveSpeed;
+
+    private double driveRotation;
+
+    private boolean inputsSquare;
+
+    public TeleDrive(DriveTrain driveTrain, double speed, double rotation, boolean squareInputs) {
         teleDrive = driveTrain;
+        driveSpeed = speed;
+        driveRotation = rotation;
+        inputsSquare = squareInputs;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(teleDrive);
     }
@@ -29,7 +38,7 @@ public class TeleDrive extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        teleDrive.arcadeDriveControl(0.5, 0.0, false);
+        teleDrive.arcadeDriveControl(driveSpeed, driveRotation, inputsSquare);
         // inputs will be from the controller
         //How do we get them here? Look at DriveForTime. Pass the arguments through the constructor of the command,
         // then store them locally to increase scope. then use arguments in CommandBase methods like 'execute()' to call
@@ -39,8 +48,6 @@ public class TeleDrive extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        //This looks good, we do want to stop it when we're done.
-        teleDrive.arcadeDriveControl(0.0, 0.0, false);
     }
 
     // Returns true when the command should end.
