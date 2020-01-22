@@ -8,8 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -22,16 +24,32 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
 
-//         private final DriveForTime exampleCommand = new DriveForTime(m_DriveTrain);
-    // MORE ARGUMENTS NEEDED!!  ^
+    //The only instance that should be created!
+//    private final ExampleArmSubsystem exampleArmSubsystem = new ExampleArmSubsystem();
 
+    //        https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
+    private Joystick driverJoystick = new Joystick(0);
+    private JoystickButton driverAButton = new JoystickButton(driverJoystick, 0);
+
+    //This can be defined inline (or in the configureDefaultSubsystems() method, but I'm doing it here so you can see each argument easier
+//    Supplier<Double> doubleSupplier = () -> driverJoystick.getRawAxis(1);
+//    ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem, doubleSupplier);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // Configure the button bindings
+        configureDefaultCommands();
         configureButtonBindings();
+    }
+
+    private void configureDefaultCommands() {
+        //https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
+//        CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain, new TeleDrive());
+
+        //Example 1: default command for arm control (I smell something like DriveTele)
+//        CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem, armCommand);
     }
 
     /**
@@ -41,6 +59,17 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        //Example 2: schedule command when held with button
+        //https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
+        //Read difference between whenHeld and whileHeld, irritatingly small.
+
+        // whenHeld will execute while button is held, and interrupt when button let go. but!, if command finishes while
+        //button being held, it wont start again!
+
+        //whileHeld is the same as the above, but if the command finishes while the button is being held, it will restart
+
+//        new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
     }
 
 
