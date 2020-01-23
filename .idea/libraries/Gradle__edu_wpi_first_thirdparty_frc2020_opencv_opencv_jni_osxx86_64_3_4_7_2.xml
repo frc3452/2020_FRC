@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.wpi.first.thirdparty.frc2020.opencv:opencv-jni:osxx86-64:3.4.7-2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2020.opencv/opencv-jni/3.4.7-2/a882596fbda0dda60459f181a70643e5d6d5459a/opencv-jni-3.4.7-2-osxx86-64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
