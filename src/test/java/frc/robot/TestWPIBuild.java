@@ -22,6 +22,7 @@ public class TestWPIBuild extends JTest {
         SpeedController leftSpeedController = new Spark(0);
         SpeedController rightSpeedController = new Spark(1);
         DifferentialDrive drive = new DifferentialDrive(leftSpeedController, rightSpeedController);
+
     }
 
     @Test
