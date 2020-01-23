@@ -31,16 +31,12 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         leftMaster = new WPI_TalonSRX(0);
         leftFollower1 = new WPI_TalonSRX(1);
-        leftFollower2 = new WPI_TalonSRX(2);
 
-        rightMaster = new WPI_TalonSRX(3);
-        rightFollower1 = new WPI_TalonSRX(4);
-        rightFollower2 = new WPI_TalonSRX(5);
+        rightMaster = new WPI_TalonSRX(12);
+        rightFollower1 = new WPI_TalonSRX(15);
 
         leftFollower1.follow(leftMaster);
-        leftFollower2.follow(leftMaster);
         rightFollower1.follow(rightMaster);
-        rightFollower2.follow(rightMaster);
 
         differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
     }
