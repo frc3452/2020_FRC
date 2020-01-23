@@ -7,18 +7,16 @@
 
 //I need to assign the motor IDs later!
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.drive;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveTrain extends SubsystemBase {
+public class Drive extends SubsystemBase {
     DifferentialDrive differentialDrive;
 
-    /**
-     * Creates a new DriveTrain.
-     */
     private WPI_TalonSRX leftMaster;
     private WPI_TalonSRX leftFollower1;
     private WPI_TalonSRX leftFollower2;
@@ -26,12 +24,18 @@ public class DriveTrain extends SubsystemBase {
     private WPI_TalonSRX rightFollower1;
     private WPI_TalonSRX rightFollower2;
 
-    public DriveTrain() {
+    private final DriveConstants constants;
+
+    public Drive(DriveConstants constants) {
+        this.constants = constants;
+
         leftMaster = new WPI_TalonSRX(0);
+        leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         leftFollower1 = new WPI_TalonSRX(1);
         leftFollower2 = new WPI_TalonSRX(2);
 
         rightMaster = new WPI_TalonSRX(3);
+        rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
         rightFollower1 = new WPI_TalonSRX(4);
         rightFollower2 = new WPI_TalonSRX(5);
 
@@ -43,11 +47,11 @@ public class DriveTrain extends SubsystemBase {
         differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
     }
 
-    public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
-        differentialDrive.arcadeDrive(speed, rotation, squareInputs);
+    public void arcadeDrive(double movePercent, double rotatePercent, boolean squareInputs) {
+        differentialDrive.arcadeDrive(movePercent, rotatePercent, squareInputs);
     }
 
-    public void tankDriveControl(double speed, double rotation) {
+    public void tankDrive(double speed, double rotation) {
         differentialDrive.tankDrive(speed, rotation, false);
     }
 

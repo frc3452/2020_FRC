@@ -16,4 +16,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public final class DriveTrain {
+        public static final double kWheelRadiusInches = 3.0;
+        public static final double SensorUnitsPerRotation = 4096.0;
+    }
 }
