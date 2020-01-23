@@ -9,6 +9,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,7 +48,7 @@ public class DriveTrain extends SubsystemBase {
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
         differentialDrive.arcadeDrive(speed, rotation, squareInputs);
     }
-
+    
     public void tankDriveControl(double speed, double rotation) {
         differentialDrive.tankDrive(speed, rotation, false);
     }

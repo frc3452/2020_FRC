@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.TeleDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -108,6 +109,8 @@ public class Robot extends TimedRobot {
 
         //https://docs.wpilib.org/en/latest/docs/software/commandbased/structuring-command-based-project.html
         //Read through all the command library documents. Nothing like this should go in Robot.java
+
+        //Oops, that was a mistake that I forgot to take out. Sorry!
     }
 
     @Override
