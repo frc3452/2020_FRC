@@ -41,18 +41,13 @@ public class RobotContainer {
 
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, 1);
 
-
-
-
-
     // This can be defined inline (or in the configureDefaultSubsystems() method,
     // but I'm doing it here so you can see each argument easier
     Supplier<Double> doubleSupplier = () -> driverJoystick.getRawAxis(1);
-    Supplier<Double> turningSupplier = () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2);
 
     // ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem,
     // doubleSupplier);
-    
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -65,9 +60,11 @@ public class RobotContainer {
     private void configureDefaultCommands() {
 
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
-        // CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain, 
+        // CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
         // new TeleDrive(m_DriveTrain, doubleSupplier, 0.0, false);
-        CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain, new TeleDrive(m_DriveTrain, doubleSupplier, turningSupplier, false));
+        CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
+                new TeleDrive(m_DriveTrain, () -> driverJoystick.getRawAxis(1),
+                        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), false));
 
         // Example 1: default command for arm control (I smell something like DriveTele)
         // CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem,
