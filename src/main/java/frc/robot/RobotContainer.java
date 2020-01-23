@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleArmSubsystem;
@@ -39,8 +40,7 @@ public class RobotContainer {
     private final Joystick driverJoystick = new Joystick(0);
 
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, 1);
-    private JoystickButton driverLeftBumper = new JoystickButton(driverJoystick, 5);
-    private JoystickButton driverRightBumper = new JoystickButton(driverJoystick, 6);
+
 
 
 
@@ -48,7 +48,7 @@ public class RobotContainer {
     // This can be defined inline (or in the configureDefaultSubsystems() method,
     // but I'm doing it here so you can see each argument easier
     Supplier<Double> doubleSupplier = () -> driverJoystick.getRawAxis(1);
-    Supplier<Double> turningSupplier = () -> 0.0;
+    Supplier<Double> turningSupplier = () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2);
 
     // ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem,
     // doubleSupplier);
