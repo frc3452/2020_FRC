@@ -43,7 +43,6 @@ public class RobotContainer {
 
     // This can be defined inline (or in the configureDefaultSubsystems() method,
     // but I'm doing it here so you can see each argument easier
-    Supplier<Double> doubleSupplier = () -> driverJoystick.getRawAxis(1);
 
     // ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem,
     // doubleSupplier);
