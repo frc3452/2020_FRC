@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -16,7 +18,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public final class DriveTrain {
+    public static final class PathFollowing {
+        public static final double kRamseteB = 2;
+        public static final double kRamseteZeta = 0.7;
+
+        public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(10.0);
+        public static final double kMaxAccelerationMetersPerSecondSquared = Units.feetToMeters(3.0);
+    }
+
+    public static final class DriveTrain {
         public static final double kWheelRadiusInches = 3.0;
         public static final double SensorUnitsPerRotation = 4096.0;
     }
