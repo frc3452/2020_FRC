@@ -11,7 +11,11 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import com.ctre.phoenix.motorcontrol.WPI_MotorSafetyImplem;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,22 +25,29 @@ public class DriveTrain extends SubsystemBase {
     /**
      * Creates a new DriveTrain.
      */
-    private WPI_TalonSRX leftMaster;
-    private WPI_TalonSRX leftFollower1;
-    private WPI_TalonSRX leftFollower2;
-    private WPI_TalonSRX rightMaster;
-    private WPI_TalonSRX rightFollower1;
-    private WPI_TalonSRX rightFollower2;
+    private Spark leftMaster;
+    private Spark leftFollower1;
+    private Spark leftFollower2;
+    private Spark rightMaster;
+    private Spark rightFollower1;
+    private Spark rightFollower2;    
+
+    /*
+    PWM 1 - 
+    PWM 2 - 
+    PWM 3 - 
+    PWM 4 - 
+    */
 
     public DriveTrain() {
-        leftMaster = new WPI_TalonSRX(0);
-        leftFollower1 = new WPI_TalonSRX(1);
+        leftMaster = new Spark(1);
+        leftFollower1 = new Spark(2);
 
-        rightMaster = new WPI_TalonSRX(12);
-        rightFollower1 = new WPI_TalonSRX(15);
+        rightMaster = new Spark(3);
+        rightFollower1 = new Spark(4);
 
-        leftFollower1.follow(leftMaster);
-        rightFollower1.follow(rightMaster);
+        leftFollower1 = leftMaster;
+        rightFollower1 = rightMaster;
 
         differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
     }
