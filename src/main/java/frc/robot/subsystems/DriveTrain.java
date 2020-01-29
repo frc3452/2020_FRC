@@ -12,10 +12,9 @@ package frc.robot.subsystems;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.WPI_MotorSafetyImplem;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,10 +26,8 @@ public class DriveTrain extends SubsystemBase {
      */
     private Spark leftMaster;
     private Spark leftFollower1;
-    private Spark leftFollower2;
     private Spark rightMaster;
     private Spark rightFollower1;
-    private Spark rightFollower2;    
 
     /*
     PWM 1 - 
@@ -46,10 +43,11 @@ public class DriveTrain extends SubsystemBase {
         rightMaster = new Spark(3);
         rightFollower1 = new Spark(4);
 
-        leftFollower1 = leftMaster;
-        rightFollower1 = rightMaster;
+        SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftMaster, leftFollower1);
+        SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightMaster, rightFollower1);
 
-        differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
+
+        differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
     }
 
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
