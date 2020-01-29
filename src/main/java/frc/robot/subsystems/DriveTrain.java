@@ -9,10 +9,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.Supplier;
-
-import com.ctre.phoenix.motorcontrol.WPI_MotorSafetyImplem;
-
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -42,6 +38,7 @@ public class DriveTrain extends SubsystemBase {
 
         rightMaster = new Spark(3);
         rightFollower1 = new Spark(4);
+        
 
         SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftMaster, leftFollower1);
         SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightMaster, rightFollower1);

@@ -62,8 +62,8 @@ public class RobotContainer {
         // CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
         // new TeleDrive(m_DriveTrain, doubleSupplier, 0.0, false);
         CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
-                new TeleDrive(m_DriveTrain, () -> driverJoystick.getRawAxis(1),
-                        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), false));
+                new TeleDrive(m_DriveTrain, () -> driverJoystick.getRawAxis(1)/3.5,
+                        () -> driverJoystick.getRawAxis(2)/2 - driverJoystick.getRawAxis(3)/2, false));
 
         // Example 1: default command for arm control (I smell something like DriveTele)
         // CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem,
