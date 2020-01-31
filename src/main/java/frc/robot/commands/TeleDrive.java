@@ -1,5 +1,3 @@
-//There's nothing changed in here
-//haha there will be soon! >:)
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -9,14 +7,29 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class TeleDrive extends CommandBase {
     private final DriveTrain teleDrive;
 
-    public TeleDrive(DriveTrain driveTrain) {
+    private Supplier<Double> driveSpeed;
+
+    private Supplier<Double> driveRotation;
+
+    private boolean inputsSquare;
+
+
+
+
+    public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, boolean squareInputs) {
         teleDrive = driveTrain;
+        driveSpeed = speed;
+        driveRotation = rotation;
+        inputsSquare = squareInputs;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(teleDrive);
     }
@@ -29,19 +42,22 @@ public class TeleDrive extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        teleDrive.arcadeDriveControl(0.5, 0.0, false);
+        teleDrive.arcadeDriveControl(driveSpeed.get(), driveRotation.get(), inputsSquare);
         // inputs will be from the controller
+        //How do we get them here? Look at DriveForTime. Pass the arguments through the constructor of the command,
+        // then store them locally to increase scope. then use arguments in CommandBase methods like 'execute()' to call
+        //methods on subsystems with those arguments.
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        teleDrive.arcadeDriveControl(0.0, 0.0, false);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        //Default, but also good. We don't have any stop conditions for this command
         return false;
     }
 }

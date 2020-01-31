@@ -9,44 +9,48 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
     DifferentialDrive differentialDrive;
+
     /**
      * Creates a new DriveTrain.
      */
-    private WPI_TalonSRX leftMaster;
-    private WPI_TalonSRX leftFollower1;
-    private WPI_TalonSRX leftFollower2;
-    private WPI_TalonSRX rightMaster;
-    private WPI_TalonSRX rightFollower1;
-    private WPI_TalonSRX rightFollower2;
+    private Spark leftMaster;
+    private Spark leftFollower1;
+    private Spark rightMaster;
+    private Spark rightFollower1;
+
+    /*
+    PWM 1 - 
+    PWM 2 - 
+    PWM 3 - 
+    PWM 4 - 
+    */
 
     public DriveTrain() {
-        leftMaster = new WPI_TalonSRX(0);
-        leftFollower1 = new WPI_TalonSRX(1);
-        leftFollower2 = new WPI_TalonSRX(2);
+        leftMaster = new Spark(1);
+        leftFollower1 = new Spark(2);
 
-        rightMaster = new WPI_TalonSRX(3);
-        rightFollower1 = new WPI_TalonSRX(4);
-        rightFollower2 = new WPI_TalonSRX(5);
+        rightMaster = new Spark(3);
+        rightFollower1 = new Spark(4);
+        
 
-        leftFollower1.follow(leftMaster);
-        leftFollower2.follow(leftMaster);
+        SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftMaster, leftFollower1);
+        SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightMaster, rightFollower1);
 
-        rightFollower1.follow(rightMaster);
-        rightFollower2.follow(rightMaster);
 
-        differentialDrive = new DifferentialDrive(leftMaster, rightMaster);
+        differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
     }
 
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
         differentialDrive.arcadeDrive(speed, rotation, squareInputs);
     }
-
+    
     public void tankDriveControl(double speed, double rotation) {
         differentialDrive.tankDrive(speed, rotation, false);
     }
