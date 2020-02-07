@@ -11,12 +11,15 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Outtake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,6 +31,8 @@ import frc.robot.subsystems.DriveTrain;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
+    private final Outtake m_Outtake = new Outtake();
+    private final Servo m_BridgeServo = new Servo(Constants.motorIDs.bridgeServoID);
 
     // The only instance that should be created!
     // private final ExampleArmSubsystem exampleArmSubsystem = new
@@ -36,13 +41,17 @@ public class RobotContainer {
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
 
-    private JoystickButton driverAButton = new JoystickButton(driverJoystick, 1);
+    private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.XboxButtons.A);
+    private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.XboxButtons.RB);
+    private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.XboxButtons.LB);
 
     // This can be defined inline (or in the configureDefaultSubsystems() method,
     // but I'm doing it here so you can see each argument easier
 
     // ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem,
     // doubleSupplier);
+    OuttakeCommand testOuttakeCommand = new OuttakeCommand(m_Outtake, m_BridgeServo, true);
+    OuttakeCommand inverseTestOuttakeCommand = new OuttakeCommand(m_Outtake, m_BridgeServo, false);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -76,7 +85,6 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
         // Example 2: schedule command when held with button
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
         // Read difference between whenHeld and whileHeld, irritatingly small.
@@ -89,7 +97,11 @@ public class RobotContainer {
         // button is being held, it will restart
 
         // new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
+        driverRBButton.whenPressed(testOuttakeCommand, true);
+        driverLBButton.whenPressed(testOuttakeCommand, false);
+
     }
+    // driverRBButton.whileActiveContinuous(command)
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

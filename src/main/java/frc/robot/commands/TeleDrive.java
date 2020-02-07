@@ -43,10 +43,6 @@ public class TeleDrive extends CommandBase {
     @Override
     public void execute() {
         teleDrive.arcadeDriveControl(-driveSpeed.get() *.35, driveRotation.get() *.5, inputsSquare);
-        // inputs will be from the controller
-        //How do we get them here? Look at DriveForTime. Pass the arguments through the constructor of the command,
-        // then store them locally to increase scope. then use arguments in CommandBase methods like 'execute()' to call
-        //methods on subsystems with those arguments.
     }
 
     // Called once the command ends or is interrupted.
