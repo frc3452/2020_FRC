@@ -14,14 +14,7 @@ import frc.robot.subsystems.DriveTrain;
 public class DriveForTime extends CommandBase {
     private final DriveTrain m_DriveTrain;
 
-    private double startTime;
-
-    private double time;
-
-    private double rotate;
-
-    private double move;
-
+    private double startTime, time, rotate, move;
 
     /**
      * Creates a new DriveForTime.
@@ -41,7 +34,6 @@ public class DriveForTime extends CommandBase {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
     }
-
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

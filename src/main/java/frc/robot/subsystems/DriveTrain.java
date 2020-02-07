@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
     DifferentialDrive differentialDrive;
@@ -26,23 +27,24 @@ public class DriveTrain extends SubsystemBase {
     private Spark rightFollower1;
 
     /*
-    PWM 1 - 
-    PWM 2 - 
-    PWM 3 - 
-    PWM 4 - 
-    */
+     * PWM 1 - PWM 2 - PWM 3 - PWM 4 -
+     */
 
     public DriveTrain() {
-        leftMaster = new Spark(1);
-        leftFollower1 = new Spark(2);
+        leftMaster = new Spark(Constants.motorIDs.leftMasterID);
+        leftFollower1 = new Spark(Constants.motorIDs.leftFollower1ID);
 
-        rightMaster = new Spark(3);
-        rightFollower1 = new Spark(4);
-        
+        rightMaster = new Spark(Constants.motorIDs.rightMasterID);
+        rightFollower1 = new Spark(Constants.motorIDs.rightFollower1ID);
+
+        leftMaster.setInverted(true);
+        leftFollower1.setInverted(true);
+
+        rightMaster.setInverted(true);
+        rightFollower1.setInverted(true);
 
         SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftMaster, leftFollower1);
         SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightMaster, rightFollower1);
-
 
         differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
     }
@@ -50,7 +52,7 @@ public class DriveTrain extends SubsystemBase {
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
         differentialDrive.arcadeDrive(speed, rotation, squareInputs);
     }
-    
+
     public void tankDriveControl(double speed, double rotation) {
         differentialDrive.tankDrive(speed, rotation, false);
     }
