@@ -14,12 +14,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ExampleArmSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -62,8 +59,8 @@ public class RobotContainer {
         // CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
         // new TeleDrive(m_DriveTrain, doubleSupplier, 0.0, false);
         CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
-                new TeleDrive(m_DriveTrain, () -> driverJoystick.getRawAxis(1)/3.5,
-                        () -> driverJoystick.getRawAxis(2)/2 - driverJoystick.getRawAxis(3)/2, false));
+                new TeleDrive(m_DriveTrain, () -> driverJoystick.getRawAxis(1) * .35,
+                        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), false));
 
         // Example 1: default command for arm control (I smell something like DriveTele)
         // CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem,
