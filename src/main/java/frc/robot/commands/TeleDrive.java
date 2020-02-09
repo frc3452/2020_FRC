@@ -22,9 +22,6 @@ public class TeleDrive extends CommandBase {
 
     private boolean inputsSquare;
 
-
-
-
     public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, boolean squareInputs) {
         teleDrive = driveTrain;
         driveSpeed = speed;
@@ -42,7 +39,7 @@ public class TeleDrive extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        teleDrive.arcadeDriveControl(-driveSpeed.get() *.35, driveRotation.get() *.5, inputsSquare);
+        teleDrive.arcadeDriveControl(driveSpeed.get(), driveRotation.get(), inputsSquare);
     }
 
     // Called once the command ends or is interrupted.

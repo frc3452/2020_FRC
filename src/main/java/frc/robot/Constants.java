@@ -21,18 +21,18 @@ import frc.robot.subsystems.DriveTrain;
  */
 public final class Constants {
 
-    public static class motorIDs {
+    public static class kHardwarePorts {
 
-        public static final int leftMasterID = 1;
-        public static final int leftFollower1ID = 2;
-        public static final int rightMasterID = 3;
-        public static final int rightFollower1ID = 4;
+        public static final int kLeftMasterID = 1;
+        public static final int kLeftFollower1ID = 2;
+        public static final int kRightMasterID = 3;
+        public static final int kRightFollower1ID = 4;
 
-        public static final int bridgeServoID = 8;
+        public static final int kBridgeServoID = 8;
 
     }
 
-    public static class XboxButtons {
+    public static class kXboxButtons {
 
         // Xbox joysticks
         public static final int LEFT_STICK_X = 0;
@@ -53,6 +53,12 @@ public final class Constants {
         public static final int LOGO_RIGHT = 8;
         public static final int LEFT_STICK_BUTTON = 9;
         public static final int RIGHT_STICK_BUTTON = 10;
+
+    }
+
+    public static class kOuttake {
+        public static final double kBridgeOpenAngle = 90.0;
+        public static final double kBridgeCloseAngle = 0.0;
 
     }
 }

@@ -31,11 +31,11 @@ public class DriveTrain extends SubsystemBase {
      */
 
     public DriveTrain() {
-        leftMaster = new Spark(Constants.motorIDs.leftMasterID);
-        leftFollower1 = new Spark(Constants.motorIDs.leftFollower1ID);
+        leftMaster = new Spark(Constants.kHardwarePorts.kLeftMasterID);
+        leftFollower1 = new Spark(Constants.kHardwarePorts.kLeftFollower1ID);
 
-        rightMaster = new Spark(Constants.motorIDs.rightMasterID);
-        rightFollower1 = new Spark(Constants.motorIDs.rightFollower1ID);
+        rightMaster = new Spark(Constants.kHardwarePorts.kRightMasterID);
+        rightFollower1 = new Spark(Constants.kHardwarePorts.kRightFollower1ID);
 
         leftMaster.setInverted(true);
         leftFollower1.setInverted(true);

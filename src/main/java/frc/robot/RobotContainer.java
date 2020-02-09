@@ -14,8 +14,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
@@ -32,7 +35,6 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
     private final Outtake m_Outtake = new Outtake();
-    private final Servo m_BridgeServo = new Servo(Constants.motorIDs.bridgeServoID);
 
     // The only instance that should be created!
     // private final ExampleArmSubsystem exampleArmSubsystem = new
@@ -41,18 +43,18 @@ public class RobotContainer {
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
 
-    private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.XboxButtons.A);
-    private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.XboxButtons.RB);
-    private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.XboxButtons.LB);
+    private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
+    private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
+    private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
 
     // This can be defined inline (or in the configureDefaultSubsystems() method,
     // but I'm doing it here so you can see each argument easier
 
     // ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem,
     // doubleSupplier);
-    OuttakeCommand testOuttakeCommand = new OuttakeCommand(m_Outtake, m_BridgeServo, true);
-    OuttakeCommand inverseTestOuttakeCommand = new OuttakeCommand(m_Outtake, m_BridgeServo, false);
-
+    Command m_OpenOuttakeCommand = new OuttakeCommand(m_Outtake, true).withTimeout(1.0).andThen(new PrintCommand("Door is open"));
+    Command m_CloseOuttakeCommand = new OuttakeCommand(m_Outtake, false).withTimeout(1.0).andThen(new PrintCommand("Door is closed"));
+    
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -67,9 +69,11 @@ public class RobotContainer {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
         // CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
         // new TeleDrive(m_DriveTrain, doubleSupplier, 0.0, false);
-        CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
-                new TeleDrive(m_DriveTrain, () -> driverJoystick.getRawAxis(1) * .35,
-                        () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), false));
+        m_DriveTrain.setDefaultCommand(new TeleDrive(m_DriveTrain, () -> -driverJoystick.getRawAxis(1) *.35,
+                () -> driverJoystick.getRawAxis(3) *.5 - driverJoystick.getRawAxis(2) *.5, false));
+
+        // This is for a different control method for the outtake.
+        // m_Outtake.setDefaultCommand(m_CloseOuttakeCommand);
 
         // Example 1: default command for arm control (I smell something like DriveTele)
         // CommandScheduler.getInstance().setDefaultCommand(exampleArmSubsystem,
@@ -97,9 +101,8 @@ public class RobotContainer {
         // button is being held, it will restart
 
         // new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
-        driverRBButton.whenPressed(testOuttakeCommand, true);
-        driverLBButton.whenPressed(testOuttakeCommand, false);
-
+        driverRBButton.whenPressed(m_OpenOuttakeCommand);
+        driverLBButton.whenPressed(m_CloseOuttakeCommand);
     }
     // driverRBButton.whileActiveContinuous(command)
 
