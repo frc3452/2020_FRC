@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.TeleDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Outtake;
@@ -52,9 +51,7 @@ public class RobotContainer {
 
     // ExampleArmCommand armCommand = new ExampleArmCommand(exampleArmSubsystem,
     // doubleSupplier);
-    Command m_OpenOuttakeCommand = new OuttakeCommand(m_Outtake, true).withTimeout(1.0).andThen(new PrintCommand("Door is open"));
-    Command m_CloseOuttakeCommand = new OuttakeCommand(m_Outtake, false).withTimeout(1.0).andThen(new PrintCommand("Door is closed"));
-    
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -101,8 +98,8 @@ public class RobotContainer {
         // button is being held, it will restart
 
         // new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
-        driverRBButton.whenPressed(m_OpenOuttakeCommand);
-        driverLBButton.whenPressed(m_CloseOuttakeCommand);
+        // driverRBButton.whenPressed(null);
+        // driverLBButton.whenPressed(putCommandHere);
     }
     // driverRBButton.whileActiveContinuous(command)
 

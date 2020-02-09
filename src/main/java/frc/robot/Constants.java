@@ -57,8 +57,20 @@ public final class Constants {
     }
 
     public static class kOuttake {
-        public static final double kBridgeOpenAngle = 90.0;
-        public static final double kBridgeCloseAngle = 0.0;
 
+        public static enum OuttakePositions {
+            OPEN(90.0), CLOSED(0.0);
+
+            private double angle;
+
+            private OuttakePositions(double angle) {
+                this.angle = angle;
+            }
+
+            public double getAngle() {
+                return angle;
+            }
+
+        };
     }
 }

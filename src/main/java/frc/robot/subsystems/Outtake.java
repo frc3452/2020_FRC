@@ -1,10 +1,9 @@
 package frc.robot.subsystems;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.kOuttake.OuttakePositions;
 
 public class Outtake extends SubsystemBase {
 
@@ -14,17 +13,13 @@ public class Outtake extends SubsystemBase {
         servo.setAngle(angle);
     }
 
-    public void openDoor() {
-        setServoAngle(Constants.kOuttake.kBridgeOpenAngle);
-    }
-
-    public void closeDoor() {
-        setServoAngle(Constants.kOuttake.kBridgeCloseAngle);
+    public void setPosition(OuttakePositions position) {
+        setServoAngle(position.getAngle());
     }
 
     @Override
     public void periodic() {
-        
+
     }
     // Possibly add a spinny wheel later
 }
