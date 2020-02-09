@@ -5,51 +5,52 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.Timer;
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
-public class DriveForTime extends CommandBase {
-    private final DriveTrain m_DriveTrain;
+public class TeleDrive extends CommandBase {
+    private final DriveTrain teleDrive;
 
-    private double startTime, time, rotate, move;
+    private Supplier<Double> driveSpeed;
 
-    /**
-     * Creates a new DriveForTime.
-     */
-    public DriveForTime(DriveTrain driveTrain, double move, double rotate, double time) {
-        m_DriveTrain = driveTrain;
-        this.move = move;
-        this.rotate = rotate;
-        this.time = time;
+    private Supplier<Double> driveRotation;
 
-        addRequirements(m_DriveTrain);
+    private boolean inputsSquare;
+
+    public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, boolean squareInputs) {
+        teleDrive = driveTrain;
+        driveSpeed = speed;
+        driveRotation = rotation;
+        inputsSquare = squareInputs;
         // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(teleDrive);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        startTime = Timer.getFPGATimestamp();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_DriveTrain.arcadeDriveControl(move, rotate, false);
+        teleDrive.arcadeDriveControl(driveSpeed.get(), driveRotation.get(), inputsSquare);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_DriveTrain.arcadeDriveControl(0, 0, false);
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime) >= time;
+        //Default, but also good. We don't have any stop conditions for this command
+        return false;
     }
 }
