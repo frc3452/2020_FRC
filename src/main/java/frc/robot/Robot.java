@@ -96,20 +96,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        
-        //What does this statement do?
-
-        //Are we declaring an object? Like
-        //DriveTrain drive = new DriveTrain();
-        //ClassName nameOfObject = new ClassName();
-
-        //Are you calling a method on an object?
-        //drive.arcade(0,0,false);
-
-        //https://docs.wpilib.org/en/latest/docs/software/commandbased/structuring-command-based-project.html
-        //Read through all the command library documents. Nothing like this should go in Robot.java
-
-        //Oops, that was a mistake that I forgot to take out. Sorry!
+     
     }
 
     @Override

@@ -22,7 +22,8 @@ public class TeleDrive extends CommandBase {
 
     private boolean inputsSquare;
 
-    public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, boolean squareInputs) {
+    public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, 
+    boolean squareInputs) {
         teleDrive = driveTrain;
         driveSpeed = speed;
         driveRotation = rotation;
