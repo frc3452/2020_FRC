@@ -13,7 +13,8 @@ public class MasterOuttakeCommand extends SequentialCommandGroup {
         addCommands(/*commands go here*/
             new MoveOuttakeCommand(true),
             new WaitCommand(5.0),
-            new MoveOuttakeCommand(false)
+            new MoveOuttakeCommand(false),
+            new WaitCommand(0.5)
         );
 
     }
