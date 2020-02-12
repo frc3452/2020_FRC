@@ -32,9 +32,9 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
     private final Outtake m_outtake = new Outtake();
-    private final Command m_OpenOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.OPEN);
-    private final Command m_CloseOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.CLOSED);
-    private final Command m_MasterOuttakeCommand = new MasterOuttakeCommand();
+    Command m_OpenOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.OPEN);
+    Command m_CloseOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.CLOSED);
+    Command m_MasterOuttakeCommand = new MasterOuttakeCommand();
 
     // The only instance that should be created!
     // private final ExampleArmSubsystem exampleArmSubsystem = new
@@ -99,11 +99,6 @@ public class RobotContainer {
         // button is being held, it will restart
 
         // new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
-        // Java errored for these
-        // //driverAButton.whenPressed(MasterOuttakeCommand(m_outtake));
-        // //driverRBButton.whenPressed(MoveOuttakeCommand(false));
-        // //driverLBButton.whenPressed(m_OpenOuttakeCommand(false));
-
         driverAButton.whenPressed(m_MasterOuttakeCommand);
         driverRBButton.whenPressed(m_CloseOuttakeCommand);
         driverLBButton.whenPressed(m_OpenOuttakeCommand);
