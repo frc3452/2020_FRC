@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.kOuttake.OuttakePositions;
 import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.outtake.MasterOuttakeCommand;
 import frc.robot.commands.outtake.MoveOuttakeCommand;
@@ -31,9 +32,9 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
     private final Outtake m_outtake = new Outtake();
-    private final Command m_OpenOuttakeCommand = new MoveOuttakeCommand(true);
-    private final Command m_CloseOuttakeCommand = new MoveOuttakeCommand(false);
-    private final Command m_MasterOuttakeCommand = new MasterOuttakeCommand(m_outtake);
+    private final Command m_OpenOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.OPEN);
+    private final Command m_CloseOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.CLOSED);
+    private final Command m_MasterOuttakeCommand = new MasterOuttakeCommand();
 
     // The only instance that should be created!
     // private final ExampleArmSubsystem exampleArmSubsystem = new
