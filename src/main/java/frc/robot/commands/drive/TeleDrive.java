@@ -40,7 +40,7 @@ public class TeleDrive extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        teleDrive.arcadeDriveControl(driveSpeed.get(), driveRotation.get(), inputsSquare);
+        teleDrive.arcadeDriveControl(driveSpeed.get() *.35, driveRotation.get() *.5, inputsSquare);
     }
 
     // Called once the command ends or is interrupted.

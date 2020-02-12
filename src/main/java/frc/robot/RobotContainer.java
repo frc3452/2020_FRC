@@ -66,8 +66,8 @@ public class RobotContainer {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
         // CommandScheduler.getInstance().setDefaultCommand(m_DriveTrain,
         // new TeleDrive(m_DriveTrain, doubleSupplier, 0.0, false);
-        m_DriveTrain.setDefaultCommand(new TeleDrive(m_DriveTrain, () -> -driverJoystick.getRawAxis(1) *.35,
-                () -> driverJoystick.getRawAxis(3) *.5 - driverJoystick.getRawAxis(2) *.5, false));
+        m_DriveTrain.setDefaultCommand(new TeleDrive(m_DriveTrain, () -> -driverJoystick.getRawAxis(1),
+                () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), false));
 
         // This is for a different control method for the outtake.
         // m_Outtake.setDefaultCommand(m_CloseOuttakeCommand);
@@ -98,6 +98,11 @@ public class RobotContainer {
         // button is being held, it will restart
 
         // new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
+        // Java errored for these
+        // //driverAButton.whenPressed(MasterOuttakeCommand(m_outtake));
+        // //driverRBButton.whenPressed(MoveOuttakeCommand(false));
+        // //driverLBButton.whenPressed(m_OpenOuttakeCommand(false));
+
         driverAButton.whenPressed(m_MasterOuttakeCommand);
         driverRBButton.whenPressed(m_CloseOuttakeCommand);
         driverLBButton.whenPressed(m_OpenOuttakeCommand);
