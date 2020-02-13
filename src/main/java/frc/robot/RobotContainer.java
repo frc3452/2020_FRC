@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kOuttake.OuttakePositions;
 import frc.robot.commands.drive.TeleDrive;
-import frc.robot.commands.outtake.MasterOuttakeCommand;
 import frc.robot.commands.outtake.MoveOuttakeCommand;
+import frc.robot.commands.outtake.OuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Outtake;
 
@@ -32,9 +32,9 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
     private final Outtake m_outtake = new Outtake();
-    Command m_OpenOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.OPEN);
-    Command m_CloseOuttakeCommand = new MoveOuttakeCommand(OuttakePositions.CLOSED);
-    Command m_MasterOuttakeCommand = new MasterOuttakeCommand();
+    Command m_OpenOuttakeCommand = new OuttakeCommand(m_outtake, Constants.kOuttake.TestEnum.OPEN);
+    Command m_CloseOuttakeCommand = new OuttakeCommand(m_outtake, Constants.kOuttake.TestEnum.CLOSE);
+    Command m_OuttakeCommand = new OuttakeCommand(m_outtake, Constants.kOuttake.TestEnum.DOFULLCOMMAND);
 
     // The only instance that should be created!
     // private final ExampleArmSubsystem exampleArmSubsystem = new
@@ -99,7 +99,7 @@ public class RobotContainer {
         // button is being held, it will restart
 
         // new JoystickButton(driverJoystick, 1).whileHeld(armCommand);
-        driverAButton.whenPressed(m_MasterOuttakeCommand);
+        driverAButton.whenPressed(m_OuttakeCommand);
         driverRBButton.whenPressed(m_CloseOuttakeCommand);
         driverLBButton.whenPressed(m_OpenOuttakeCommand);
     }

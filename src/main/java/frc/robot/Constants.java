@@ -72,5 +72,11 @@ public final class Constants {
             }
 
         };
+
+        public static enum TestEnum {
+            DOFULLCOMMAND, OPEN, CLOSE
+        }
     }
+
+    
 }
