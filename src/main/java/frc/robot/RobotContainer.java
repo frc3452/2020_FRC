@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kOuttake.OuttakePositions;
-import frc.robot.commands.PositionCommand;
 import frc.robot.commands.drive.TeleDrive;
-import frc.robot.commands.outtake.OuttakeCommand;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Outtake;
-import frc.robot.subsystems.PositionedSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,12 +26,7 @@ import frc.robot.subsystems.PositionedSubsystem;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
-    private final Outtake m_outtake = new Outtake();
-    private final PositionedSubsystem positionedSubsystem = new PositionedSubsystem();
-
-    Command m_OpenOuttakeCommand = new OuttakeCommand(m_outtake, Constants.kOuttake.TestEnum.OPEN);
-    Command m_CloseOuttakeCommand = new OuttakeCommand(m_outtake, Constants.kOuttake.TestEnum.CLOSE);
-    Command m_OuttakeCommand = new OuttakeCommand(m_outtake, Constants.kOuttake.TestEnum.DOFULLCOMMAND);
+    public final Outtake m_outtake = new Outtake();
 
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
@@ -57,13 +50,8 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
-        driverAButton.whenPressed(m_OuttakeCommand);
-        driverRBButton.whenPressed(m_CloseOuttakeCommand);
-        driverLBButton.whenPressed(m_OpenOuttakeCommand);
-
-
-        driverAButton.whenPressed(new PositionCommand(positionedSubsystem, OuttakePositions.OPEN));
-        driverRBButton.whenPressed(new PositionCommand(positionedSubsystem, OuttakePositions.CLOSED));
+        driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
+        driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
     }
 
     public Command getAutonomousCommand() {
