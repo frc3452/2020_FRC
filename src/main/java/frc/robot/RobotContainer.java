@@ -44,7 +44,7 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/subsystems.html#setting-default-commands
         m_DriveTrain.setDefaultCommand(new TeleDrive(m_DriveTrain, () -> -driverJoystick.getRawAxis(1),
-                () -> driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2), false));
+                () -> (driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2)), false));
 
     }
 
