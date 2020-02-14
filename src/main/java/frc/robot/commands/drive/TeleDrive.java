@@ -18,7 +18,7 @@ public class TeleDrive extends CommandBase {
     private Supplier<Double> driveSpeed;
 
     private Supplier<Double> driveRotation;
-
+  
     private boolean inputsSquare;
 
     public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, 
