@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.DriveTrain;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -30,6 +28,7 @@ public final class Constants {
 
         public static final int kBridgeServoID = 8;
         public static final int kIntakeMotorID = 5;
+        public static final int kTestSparkMaxID = 5;
 
     }
 
