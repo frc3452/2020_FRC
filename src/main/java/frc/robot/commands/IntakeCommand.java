@@ -7,12 +7,18 @@ import frc.robot.subsystems.Intake;
 public class IntakeCommand extends CommandBase {
 
     private IntakeSpeeds intakeSpeed;
-    private Intake intake = new Intake();
+    private Intake intake;
 
     public IntakeCommand(Intake intake, IntakeSpeeds speed) {
         intakeSpeed = speed;
         this.intake = intake;
         addRequirements(intake);
+    }
+
+    @Override
+    public void initialize() {
+        // TODO Auto-generated method stub
+        super.initialize();
     }
 
     @Override
@@ -22,11 +28,14 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("hah! You found me!");
+        // intake.moveIntake(IntakeSpeeds.STOPPED);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        
+        return true;
     }
 
 };
