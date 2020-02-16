@@ -29,8 +29,7 @@ public final class Constants {
         public static final int kRightFollower1ID = 4;
 
         public static final int kBridgeServoID = 8;
-        public static final int kIntakeMotorID = 1;
-        public static final int kIntakeMotorFollowerID = 2;
+        public static final int kIntakeMotorID = 5;
 
     }
 
