@@ -10,10 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakePositions;
 import frc.robot.commands.drive.TeleDrive;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
 
 /**
@@ -26,12 +29,15 @@ import frc.robot.subsystems.Outtake;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
-    public final Outtake m_outtake = new Outtake();
+    private final Outtake m_outtake = new Outtake();
+    private final Intake m_intake = new Intake();
 
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
 
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
+    private JoystickButton driverBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.B);
+    private JoystickButton driverYButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.Y);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
 
@@ -50,6 +56,9 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
+        driverAButton.whenPressed(new IntakeCommand(m_intake, Constants.kIntake.IntakeSpeeds.SLOW));
+        driverBButton.whenPressed(new IntakeCommand(m_intake, IntakeSpeeds.MEDIUM));
+        driverYButton.whenPressed(new IntakeCommand(m_intake, IntakeSpeeds.FAST));
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
     }

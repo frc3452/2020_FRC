@@ -29,6 +29,7 @@ public final class Constants {
         public static final int kRightFollower1ID = 4;
 
         public static final int kBridgeServoID = 8;
+        public static final int kIntakeServoID = 5;
 
     }
 
@@ -73,6 +74,22 @@ public final class Constants {
 
         };
 
+    }
+
+    public static class kIntake {
+        public static enum IntakeSpeeds {
+            SLOW(10.0), MEDIUM(40.0), FAST(70.0);
+
+            private double speed;
+
+            private IntakeSpeeds(double speed) {
+                this.speed = speed;
+            }
+
+            public double getSpeed() {
+                return speed;
+            }
+        }
     }
 
     
