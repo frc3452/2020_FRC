@@ -8,12 +8,11 @@ import frc.robot.Constants.kHardwarePorts;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 
 public class Intake extends SubsystemBase {
-    //this is written using a Spark because I'm not positive how Spark Maxes work yet. I'll change it all later.
-    private static CANSparkMax sparkMax = new CANSparkMax(kHardwarePorts.kIntakeMotorID, MotorType.kBrushless);
+    private CANSparkMax sparkMax;
         
 
     public Intake() {
-
+        sparkMax = new CANSparkMax(kHardwarePorts.kIntakeMotorID, MotorType.kBrushless);
     }
 
     public void moveIntake(IntakeSpeeds speed) {
