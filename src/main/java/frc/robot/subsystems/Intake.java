@@ -21,7 +21,6 @@ public edu.wpi.first.wpilibj.Timer time = new edu.wpi.first.wpilibj.Timer();
         //solution. I'll try it.
     } 
 
-    // public void moveIntake(final 
     public void moveIntake(IntakeSpeeds speed) {
         if (time.hasPeriodPassed(.5)){
         sparkMax.set(speed.getSpeed());

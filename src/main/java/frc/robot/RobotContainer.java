@@ -41,7 +41,6 @@ public class RobotContainer {
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
     private JoystickButton driverBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.B);
     private JoystickButton driverYButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.Y);
-    private JoystickButton driverXButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.X);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
 
@@ -70,8 +69,6 @@ public class RobotContainer {
 
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
-
-        CommandScheduler.getInstance().onCommandFinish(IntakeCommand -> time.start());
     }
 
     public Command getAutonomousCommand() {
