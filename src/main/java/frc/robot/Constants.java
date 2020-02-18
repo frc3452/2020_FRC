@@ -77,7 +77,7 @@ public final class Constants {
 
     public static class kIntake {
         public static enum IntakeSpeeds {
-            STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
+            BACKWARDS(-1.0), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
 
             private double speed;
 

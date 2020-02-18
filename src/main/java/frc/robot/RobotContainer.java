@@ -7,8 +7,11 @@
 
 package frc.robot;
 
+import java.util.Timer;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakePositions;
@@ -38,6 +41,7 @@ public class RobotContainer {
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
     private JoystickButton driverBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.B);
     private JoystickButton driverYButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.Y);
+    private JoystickButton driverXButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.X);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
 
@@ -53,7 +57,7 @@ public class RobotContainer {
                 () -> (driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2)), false));
 
     }
-
+public edu.wpi.first.wpilibj.Timer time = new edu.wpi.first.wpilibj.Timer();
     private void configureButtonBindings() {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
         driverAButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.SLOW));
@@ -67,6 +71,8 @@ public class RobotContainer {
 
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
+
+        CommandScheduler.getInstance().onCommandFinish(IntakeCommand -> time.start());
     }
 
     public Command getAutonomousCommand() {
