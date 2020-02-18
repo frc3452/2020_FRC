@@ -23,7 +23,6 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if 
         intake.moveIntake(intakeSpeed);
     }
 
