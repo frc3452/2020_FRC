@@ -57,7 +57,6 @@ public class RobotContainer {
                 () -> (driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2)), false));
 
     }
-public edu.wpi.first.wpilibj.Timer time = new edu.wpi.first.wpilibj.Timer();
     private void configureButtonBindings() {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
         driverAButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.SLOW));
