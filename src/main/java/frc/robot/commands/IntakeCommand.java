@@ -12,7 +12,7 @@ public class IntakeCommand extends CommandBase {
 
     private IntakeSpeeds intakeSpeed;
     private Intake intake;
-    private edu.wpi.first.wpilibj.Timer time = new edu.wpi.first.wpilibj.Timer();
+    private static edu.wpi.first.wpilibj.Timer time = new edu.wpi.first.wpilibj.Timer();
     private final Joystick driverJoystick = new Joystick(0);
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
     private JoystickButton driverBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.B);
@@ -33,27 +33,43 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-            if (counter >= 1){
-            intake.moveIntake(IntakeSpeeds.BACKWARDS);
-            time.stop();
-            time.reset();
-            System.out.println(counter);
-            counter = 0;
+            if (counter == 1){
+                if (time.get() < 1.0) {
+                intake.moveIntake(IntakeSpeeds.BACKWARDS);
+                time.stop();
+                time.reset();
+                System.out.println(counter);
+                }
+                else {
+                intake.moveIntake(intakeSpeed);
+                time.stop();
+                time.reset();
+                counter = 0;
+                System.out.println(counter);
+                }
             }
             else {
             intake.moveIntake(intakeSpeed);
             time.stop();
             time.reset();
-            // counter ++;
             System.out.println(counter);
             }
         }  
-    
+    //this is working just fine as a toggle, but for some reason, the timer doesn't seem to be starting at all.
+    //I'll look into that more.
 
     @Override
     public void end(boolean interrupted) {
+        if(counter == 1){
+            counter = 0;
+            }
+            else {
+            counter ++;
+            }
+    
         intake.moveIntake(IntakeSpeeds.STOPPED);
         CommandScheduler.getInstance().onCommandFinish(IntakeCommand -> time.start());
+        
     }
 
     @Override
@@ -63,12 +79,10 @@ public class IntakeCommand extends CommandBase {
             return false;
 
         }
-        else {
-        System.out.println("2");
-        counter ++;
+
+        
         return true;
-        }
+        
     }
 
 };
-
