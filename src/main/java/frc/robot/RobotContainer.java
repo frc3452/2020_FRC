@@ -7,20 +7,19 @@
 
 package frc.robot;
 
-import java.util.Timer;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakePositions;
 import frc.robot.commands.drive.TeleDrive;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.OuttakeCommand;
+import frc.robot.commands.intake.NoFinishIntakeCommand;
+import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.outtake.OuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
+import frc.robot.util.AdvancedButtons;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -56,16 +55,37 @@ public class RobotContainer {
                 () -> (driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2)), false));
 
     }
+
     private void configureButtonBindings() {
-        // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
-        driverAButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.SLOW));
-        // driverAButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        driverAButton.whileHeld(null);
+//        ^^^
+        //if we control click through this, we can see we get to a spot in Trigger.java
+        // which is directly adding a runnable to the command scheduler, which will check button state and
+        // schedule commands when we call
+        // CommandScheduler.getInstance().run() in robotPeriodic in Robot.java;
 
-        driverBButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.MEDIUM));
-        // driverBButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        //Part of Trigger.java:
+//        CommandScheduler.getInstance().addButton(new Runnable() {
+//      private boolean m_pressedLast = get();
+//
+//      @Override
+//      public void run() {
+//        boolean pressed = get();
+//
+//        if (pressed) {
+//          command.schedule(interruptible);
+//        } else if (m_pressedLast) {
+//          command.cancel();
+//        }
+//
+//        m_pressedLast = pressed;
+//      }
+//    });
 
-        driverYButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.FAST));
-        // driverYButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        //Modify the code here
+        AdvancedButtons.quickReleaseAndWhileHeld(driverAButton,
+                new ToggleIntake(m_intake, IntakeSpeeds.MEDIUM),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.5);
 
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
