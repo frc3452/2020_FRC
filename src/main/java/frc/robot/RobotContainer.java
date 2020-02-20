@@ -59,13 +59,13 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
         driverAButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.SLOW));
-        driverAButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        // driverAButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
 
         driverBButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.MEDIUM));
-        driverBButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        // driverBButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
 
         driverYButton.whileHeld(new IntakeCommand(m_intake, IntakeSpeeds.FAST));
-        driverYButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        // driverYButton.whenInactive(new IntakeCommand(m_intake, IntakeSpeeds.STOPPED));
 
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));

@@ -21,14 +21,14 @@ public final class Constants {
 
     public static class kHardwarePorts {
 
-        public static final int kLeftMasterID = 1;
+        public static final int kLeftMasterID = 5; // should be 1
         public static final int kLeftFollower1ID = 2;
         public static final int kRightMasterID = 3;
         public static final int kRightFollower1ID = 4;
 
         public static final int kBridgeServoID = 8;
-        public static final int kIntakeMotorID = 5;
-        public static final int kTestSparkMaxID = 5;
+        public static final int kIntakeMotorID = 1;
+        public static final int kTestSparkMaxID = 6;
 
     }
 
