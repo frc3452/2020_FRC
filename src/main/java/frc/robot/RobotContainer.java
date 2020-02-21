@@ -57,7 +57,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        driverAButton.whileHeld(null);
+        // driverAButton.whileHeld(null);
 //        ^^^
         //if we control click through this, we can see we get to a spot in Trigger.java
         // which is directly adding a runnable to the command scheduler, which will check button state and
@@ -84,8 +84,16 @@ public class RobotContainer {
 
         //Modify the code here
         AdvancedButtons.quickReleaseAndWhileHeld(driverAButton,
-                new ToggleIntake(m_intake, IntakeSpeeds.MEDIUM),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.5);
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.SLOW),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+
+        AdvancedButtons.quickReleaseAndWhileHeld(driverBButton,
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.MEDIUM),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+
+        AdvancedButtons.quickReleaseAndWhileHeld(driverYButton,
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
 
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
