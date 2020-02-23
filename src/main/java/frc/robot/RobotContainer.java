@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakePositions;
 import frc.robot.commands.drive.TeleDrive;
-import frc.robot.commands.intake.NoFinishIntakeCommand;
-import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.outtake.OuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
