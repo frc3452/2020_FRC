@@ -57,44 +57,9 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // driverAButton.whileHeld(null);
-//        ^^^
-        //if we control click through this, we can see we get to a spot in Trigger.java
-        // which is directly adding a runnable to the command scheduler, which will check button state and
-        // schedule commands when we call
-        // CommandScheduler.getInstance().run() in robotPeriodic in Robot.java;
-
-        //Part of Trigger.java:
-//        CommandScheduler.getInstance().addButton(new Runnable() {
-//      private boolean m_pressedLast = get();
-//
-//      @Override
-//      public void run() {
-//        boolean pressed = get();
-//
-//        if (pressed) {
-//          command.schedule(interruptible);
-//        } else if (m_pressedLast) {
-//          command.cancel();
-//        }
-//
-//        m_pressedLast = pressed;
-//      }
-//    });
-
         //Modify the code here
-        AdvancedButtons.quickReleaseAndWhileHeld(driverAButton,
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.SLOW),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
-
-        AdvancedButtons.quickReleaseAndWhileHeld(driverBButton,
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.MEDIUM),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
-
-        AdvancedButtons.quickReleaseAndWhileHeld(driverYButton,
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
-
+        
+        
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
     }

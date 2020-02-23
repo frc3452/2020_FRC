@@ -12,13 +12,6 @@ public class AdvancedButtons {
     public static Button quickReleaseAndWhileHeld(Button button, Command quickRelease, Command whileHeld,
             double quickReleaseTime) {
         CommandScheduler.getInstance().addButton(new Runnable() {
-
-            // We can use variables out here to store the last button press, or the last
-            // timestamp
-            private double outsideVariable = 3.14;
-            private double currentTime = 0.0;
-            private double storedTime = 0.0;
-
             @Override
             public void run() {
                 // Timer.getFPGATimestamp() to get current time
@@ -36,34 +29,18 @@ public class AdvancedButtons {
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
 
-                boolean press = button.get();
-                boolean prevButton = false;
+                //boolean press = button.get();
 
-                if (press) {
-                    quickRelease.schedule();
-                    currentTime = Timer.getFPGATimestamp();
-                }
+                // if (somethingA)
+                //quickRelease.schedule();
 
-                if (((currentTime - storedTime) < quickReleaseTime) && prevButton == !press && press == true) {
-                    whileHeld.schedule();
-                    storedTime = currentTime;
-                    currentTime = Timer.getFPGATimestamp();
-                }
+                //if (somethingB)
+                //whileHeld.schedule();
 
-                // if (time.get() > quickReleaseTime) {
-                // time.stop();
-                // time.reset();
-                // }
-
-                if (press == false) {
-                    storedTime = currentTime;
-                    whileHeld.cancel();
-                    quickRelease.cancel();
-                }
-                prevButton = press;
-            }
-        });
-
+                //if (somethingC)
+                //whileHeld.cancel();
+                }        
+            });
         return button;
     }
 }
