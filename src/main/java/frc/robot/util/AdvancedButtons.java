@@ -15,9 +15,9 @@ public class AdvancedButtons {
 
             // We can use variables out here to store the last button press, or the last
             // timestamp
-            private double outsideVariable = 3.14;
             private double currentTime = 0.0;
-            private double storedTime = 0.0;
+            private double timePressed = 0.0;
+            private Timer testTimer = new Timer();
 
             @Override
             public void run() {
@@ -38,17 +38,27 @@ public class AdvancedButtons {
 
                 boolean press = button.get();
                 boolean prevButton = false;
+                int toggleCount = 0;
+
+                currentTime = Timer.getFPGATimestamp();
+
+                if (testTimer.get() > .5) {
+                    whileHeld.schedule();
+                }
 
                 if (press) {
+                    timePressed = Timer.getFPGATimestamp();
                     quickRelease.schedule();
-                    currentTime = Timer.getFPGATimestamp();
+                    testTimer.start();
+                    if (toggleCount == 1)
+                        toggleCount = 0;
+
                 }
 
-                if (((currentTime - storedTime) < quickReleaseTime) && prevButton == !press && press == true) {
-                    whileHeld.schedule();
-                    storedTime = currentTime;
-                    currentTime = Timer.getFPGATimestamp();
-                }
+                // if (press) {
+                //     quickRelease.schedule();
+                // }
+
 
                 // if (time.get() > quickReleaseTime) {
                 // time.stop();
@@ -56,9 +66,12 @@ public class AdvancedButtons {
                 // }
 
                 if (press == false) {
-                    storedTime = currentTime;
                     whileHeld.cancel();
+                    testTimer.stop();
+                    testTimer.reset();
+                    if(toggleCount == 0){
                     quickRelease.cancel();
+                    }
                 }
                 prevButton = press;
             }
