@@ -9,7 +9,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Spark;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,30 +21,46 @@ public class DriveTrain extends SubsystemBase {
     /**
      * Creates a new DriveTrain.
      */
-    private Spark leftMaster;
-    private Spark leftFollower1;
-    private Spark rightMaster;
-    private Spark rightFollower1;
+
+    private WPI_TalonSRX leftfront;
+    private WPI_TalonSRX leftMiddle;
+    private WPI_TalonSRX leftBack;
+    private WPI_TalonSRX rightFront;
+    private WPI_TalonSRX rightMiddle;
+    private WPI_TalonSRX rightBack;
 
     /*
      * PWM 1 - PWM 2 - PWM 3 - PWM 4 -
      */
 
-    public DriveTrain() {
-        leftMaster = new Spark(Constants.kHardwarePorts.kLeftMasterID);
-        leftFollower1 = new Spark(Constants.kHardwarePorts.kLeftFollower1ID);
+    public DriveTrain() {   
+        leftfront = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftFrontID);
+        leftMiddle = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftMiddleID);
+        leftBack = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftBackID);
 
-        rightMaster = new Spark(Constants.kHardwarePorts.kRightMasterID);
-        rightFollower1 = new Spark(Constants.kHardwarePorts.kRightFollower1ID);
+        rightFront = new WPI_TalonSRX(Constants.kHardwarePorts.kRightFrontID);
+        rightMiddle = new WPI_TalonSRX(Constants.kHardwarePorts.kRightMiddleID);
+        rightBack = new WPI_TalonSRX(Constants.kHardwarePorts.kRightBackID);
 
-        leftMaster.setInverted(true);
-        leftFollower1.setInverted(true);
+        //for every talon
+        leftfront.configFactoryDefault();
+        leftMiddle.configFactoryDefault();
+        leftBack.configFactoryDefault();
+        rightFront.configFactoryDefault();
+        rightMiddle.configFactoryDefault();
+        rightBack.configFactoryDefault();
 
-        rightMaster.setInverted(true);
-        rightFollower1.setInverted(true);
 
-        SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftMaster, leftFollower1);
-        SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightMaster, rightFollower1);
+        // leftfront.setInverted(true);
+        // leftMiddle.setInverted(true);
+        // leftBack.setInverted(true);
+
+        // rightFront.setInverted(true);
+        // rightMiddle.setInverted(true);
+        // rightBack.setInverted(true);
+
+        SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftfront, leftMiddle, leftBack);
+        SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightFront, rightMiddle, rightBack);
 
         differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
     }
