@@ -1,3 +1,4 @@
+  
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -20,16 +21,24 @@ package frc.robot;
 public final class Constants {
 
     public static class kHardwarePorts {
+        //left front = 1
+        //left middle = 2
+        //left back = 3
+        //right front = 4
+        //right middle = 5
+        //right back = 6
 
-        public static final int kLeftMasterID = 5; // should be 1
-        public static final int kLeftFollower1ID = 2;
-        public static final int kRightMasterID = 3;
-        public static final int kRightFollower1ID = 4;
+        public static final int kLeftFrontID = 1; 
+        public static final int kLeftMiddleID = 2;
+        public static final int kLeftBackID = 3;
+        public static final int kRightFrontID = 4;
+        public static final int kRightMiddleID = 5;
+        public static final int kRightBackID = 6;
 
         public static final int kBridgeServoID = 8;
         public static final int kIntakeMotorID = 1;
-        public static final int kTestSparkMaxID = 6;
-
+        public static final int kTestSparkMaxID = 7;
+//I changed TestSparkMaxID to 7 from 6 to use ID 6 for KRightBackID
     }
 
     public static class kXboxButtons {
@@ -56,7 +65,13 @@ public final class Constants {
 
     }
 
+    public static class kDrive {
+
+    }
+
     public static class kOuttake {
+
+        //
 
         public static enum OuttakePositions {
             OPEN(90.0), CLOSED(0.0);
@@ -76,6 +91,7 @@ public final class Constants {
     }
 
     public static class kIntake {
+        //
         public static enum IntakeSpeeds {
             BACKWARDS(-1.0), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
 
