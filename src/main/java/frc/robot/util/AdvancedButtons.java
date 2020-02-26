@@ -15,8 +15,7 @@ public class AdvancedButtons {
 
             // We can use variables out here to store the last button press, or the last
             // timestamp
-            private double currentTime = 0.0;
-            private double timePressed = 999999999999999.0;
+
             private double longPress = 999999999999999.0;
             private boolean prevButton = false;
             private int flag = 0;
@@ -29,23 +28,13 @@ public class AdvancedButtons {
                 
                 boolean press = button.get();
 
-
-                
-                // System.out.println(testTimer.get());
-
-
-
-
                 if (press) {
-                    timePressed = Timer.getFPGATimestamp();
                     if (prevButton != press)
                     flag++;
 
                 }
-System.out.println(flag);
 
                 if (flag == 1) {
-                    System.out.println("halt");
                     quickRelease.schedule();
                 }
 
@@ -65,12 +54,6 @@ System.out.println(flag);
                         flag = 0;
                     }
 
-                    // if (toggleCount == 2) {
-                    //     quickRelease.cancel();
-                    //     toggleCount = 0;
-                    // }
-
-                    // if ((Timer.getFPGATimestamp() - longPres) > quickReleaseTime)
                         whileHeld.cancel();
 
                     testTimer.stop();
