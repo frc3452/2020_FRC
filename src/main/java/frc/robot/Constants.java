@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.DriveTrain;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -23,12 +21,14 @@ public final class Constants {
 
     public static class kHardwarePorts {
 
-        public static final int kLeftMasterID = 1;
+        public static final int kLeftMasterID = 5; // should be 1
         public static final int kLeftFollower1ID = 2;
         public static final int kRightMasterID = 3;
         public static final int kRightFollower1ID = 4;
 
         public static final int kBridgeServoID = 8;
+        public static final int kIntakeMotorID = 1;
+        public static final int kTestSparkMaxID = 6;
 
     }
 
@@ -73,6 +73,22 @@ public final class Constants {
 
         };
 
+    }
+
+    public static class kIntake {
+        public static enum IntakeSpeeds {
+            BACKWARDS(-1.0), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
+
+            private double speed;
+
+            private IntakeSpeeds(double speed) {
+                this.speed = speed;
+            }
+
+            public double getSpeed() {
+                return speed;
+            }
+        }
     }
 
     

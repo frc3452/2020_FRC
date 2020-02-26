@@ -10,11 +10,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakePositions;
 import frc.robot.commands.drive.TeleDrive;
-import frc.robot.commands.OuttakeCommand;
+import frc.robot.commands.intake.NoFinishIntakeCommand;
+import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.outtake.OuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
+import frc.robot.util.AdvancedButtons;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -26,12 +31,15 @@ import frc.robot.subsystems.Outtake;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveTrain m_DriveTrain = new DriveTrain();
-    public final Outtake m_outtake = new Outtake();
+    private final Outtake m_outtake = new Outtake();
+    private final Intake m_intake = new Intake();
 
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
 
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
+    private JoystickButton driverBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.B);
+    private JoystickButton driverYButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.Y);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
 
@@ -49,7 +57,44 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#whileactiveonce-whenheld
+        // driverAButton.whileHeld(null);
+//        ^^^
+        //if we control click through this, we can see we get to a spot in Trigger.java
+        // which is directly adding a runnable to the command scheduler, which will check button state and
+        // schedule commands when we call
+        // CommandScheduler.getInstance().run() in robotPeriodic in Robot.java;
+
+        //Part of Trigger.java:
+//        CommandScheduler.getInstance().addButton(new Runnable() {
+//      private boolean m_pressedLast = get();
+//
+//      @Override
+//      public void run() {
+//        boolean pressed = get();
+//
+//        if (pressed) {
+//          command.schedule(interruptible);
+//        } else if (m_pressedLast) {
+//          command.cancel();
+//        }
+//
+//        m_pressedLast = pressed;
+//      }
+//    });
+
+        //Modify the code here
+        AdvancedButtons.quickReleaseAndWhileHeld(driverAButton,
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.SLOW),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+
+        AdvancedButtons.quickReleaseAndWhileHeld(driverBButton,
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.MEDIUM),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+
+        AdvancedButtons.quickReleaseAndWhileHeld(driverYButton,
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST),
+                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
     }
