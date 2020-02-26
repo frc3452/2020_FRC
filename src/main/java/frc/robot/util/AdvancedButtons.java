@@ -18,6 +18,8 @@ public class AdvancedButtons {
             private double currentTime = 0.0;
             private double timePressed = 999999999999999.0;
             private double longPress = 999999999999999.0;
+            private boolean prevButton = false;
+            private int flag = 0;
 
             private Timer testTimer = new Timer();
             
@@ -26,38 +28,44 @@ public class AdvancedButtons {
             public void run() {
                 
                 boolean press = button.get();
-                boolean prevButton = false;
-                int toggleCount = 0;
+
 
                 
                 // System.out.println(testTimer.get());
-                if ((Timer.getFPGATimestamp() - longPress) > quickReleaseTime) {
-                    whileHeld.schedule();
-                    quickRelease.cancel();
-                }
+
+
+
 
                 if (press) {
-                    testTimer.start();
                     timePressed = Timer.getFPGATimestamp();
-                    if (toggleCount == 0)
-                    toggleCount++;
+                    if (prevButton != press)
+                    flag++;
 
+                }
+System.out.println(flag);
+
+                if (flag == 1) {
+                    System.out.println("halt");
+                    quickRelease.schedule();
                 }
 
 
-                
 
                 if (press == false) {
 
                     longPress = Timer.getFPGATimestamp();
 
-                    if (toggleCount == 2) {
+                    if (flag > 1) {
                         quickRelease.cancel();
-                        toggleCount = 0;
+                        flag = 0;
                     }
 
-                    if ((Timer.getFPGATimestamp() - timePressed) > quickReleaseTime)
-                        timePressed = 999999999999999.0;
+                    // if (toggleCount == 2) {
+                    //     quickRelease.cancel();
+                    //     toggleCount = 0;
+                    // }
+
+                    // if ((Timer.getFPGATimestamp() - longPres) > quickReleaseTime)
                         whileHeld.cancel();
 
                     testTimer.stop();
