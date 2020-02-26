@@ -49,7 +49,12 @@ System.out.println(flag);
                     quickRelease.schedule();
                 }
 
+                if ((Timer.getFPGATimestamp() - longPress) > quickReleaseTime) {
+                    quickRelease.cancel();
+                    flag = 0;
+                    whileHeld.schedule();
 
+                }
 
                 if (press == false) {
 
