@@ -7,7 +7,7 @@ import frc.robot.Constants.kOuttake.OuttakePositions;
 
 public class Outtake extends SubsystemBase {
 
-    private Servo servo = new Servo(Constants.kHardwarePorts.kBridgeServoID);
+    private Servo servo = new Servo(Constants.kHardwarePorts.kOuttakeServoID);
 
     private void setServoAngle(double angle) {
         servo.setAngle(angle);

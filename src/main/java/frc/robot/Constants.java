@@ -35,9 +35,8 @@ public final class Constants {
         public static final int kRightMiddleID = 5;
         public static final int kRightBackID = 6;
 
-        public static final int kBridgeServoID = 8;
-        public static final int kIntakeMotorID = 1;
-        public static final int kTestSparkMaxID = 7;
+        public static final int kOuttakeServoID = 18;
+        public static final int kIntakeMotorID = 19;
 //I changed TestSparkMaxID to 7 from 6 to use ID 6 for KRightBackID
     }
 
@@ -93,7 +92,7 @@ public final class Constants {
     public static class kIntake {
         //
         public static enum IntakeSpeeds {
-            BACKWARDS(-1.0), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
+            BACKWARDS(-.8), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
 
             private double speed;
 

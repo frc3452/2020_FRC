@@ -39,6 +39,7 @@ public class RobotContainer {
 
     private JoystickButton driverAButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.A);
     private JoystickButton driverBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.B);
+    private JoystickButton driverXButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.X);
     private JoystickButton driverYButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.Y);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
@@ -82,18 +83,23 @@ public class RobotContainer {
 //      }
 //    });
 
-        //Modify the code here
-        AdvancedButtons.quickReleaseAndWhileHeld(driverAButton,
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.SLOW),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+//Modify the code here
+        // AdvancedButtons.quickReleaseAndWhileHeld(driverAButton,
+        //         new NoFinishIntakeCommand(m_intake, IntakeSpeeds.SLOW),
+        //         new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
 
-        AdvancedButtons.quickReleaseAndWhileHeld(driverBButton,
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.MEDIUM),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+        // AdvancedButtons.quickReleaseAndWhileHeld(driverBButton,
+        //         new NoFinishIntakeCommand(m_intake, IntakeSpeeds.MEDIUM),
+        //         new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
 
-        AdvancedButtons.quickReleaseAndWhileHeld(driverYButton,
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST),
-                new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+        // AdvancedButtons.quickReleaseAndWhileHeld(driverYButton,
+        //         new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST),
+        //         new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS), 0.15);
+
+        driverAButton.whenPressed(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.MEDIUM));
+        driverXButton.whenPressed(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS));
+        driverAButton.whenInactive(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.STOPPED));
+        driverXButton.whenInactive(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.STOPPED));
 
         driverLBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.OPEN));
         driverRBButton.whenPressed(new OuttakeCommand(m_outtake, OuttakePositions.CLOSED));
