@@ -21,16 +21,15 @@ public class AdvancedButtons {
             private int flag = 0;
 
             private Timer testTimer = new Timer();
-            
 
             @Override
             public void run() {
-                
+
                 boolean press = button.get();
 
                 if (press) {
                     if (prevButton != press)
-                    flag++;
+                        flag++;
 
                 }
 
@@ -54,7 +53,7 @@ public class AdvancedButtons {
                         flag = 0;
                     }
 
-                        whileHeld.cancel();
+                    whileHeld.cancel();
 
                     testTimer.stop();
                     testTimer.reset();
@@ -66,18 +65,61 @@ public class AdvancedButtons {
 
         return button;
     }
+
+    public static Button buttonToggle(Button button, Command option1, Command option2) {
+        CommandScheduler.getInstance().addButton(new Runnable() {
+
+            private boolean prevButton = false;
+            private int flag = 0;
+
+            @Override
+            public void run() {
+
+                boolean press = button.get();
+
+                if (press) {
+                    if (prevButton != press)
+                        flag++;
+
+                }
+
+
+                if (press == false) {
+
+                    if (flag > 1) {
+                        option1.cancel();
+                        option2.schedule();
+                        System.out.println("option 2 scheduled");
+                        flag = 0;
+                    }
+
+                    
+                    if (flag == 1) {
+                        option1.schedule();
+                        option2.cancel();
+                        System.out.println("option 1 scheduled");
+
+                }
+
+                }
+                prevButton = press;
+            }
+        });
+
+        return button;
+    }
 }
 // Timer.getFPGATimestamp() to get current time
 
-                // You can store the previous button press every cycle, so that you can use both
-                // the
-                // current value (button.get()) and the previous value to determine when it was
-                // released or pressed
-                // (if it was not pressed, and now it is, we do
+// You can store the previous button press every cycle, so that you can use both
+// the
+// current value (button.get()) and the previous value to determine when it was
+// released or pressed
+// (if it was not pressed, and now it is, we do
 
-                // to figure out how long you've been doing something, store time when that
-                // thing starts, and then use
-                // Timer.getFPGATimeStamp() - thatTime to figure out how long it's been since
-                // you've done it
+// to figure out how long you've been doing something, store time when that
+// thing starts, and then use
+// Timer.getFPGATimeStamp() - thatTime to figure out how long it's been since
+// you've done it
 
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
