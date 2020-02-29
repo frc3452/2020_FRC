@@ -15,7 +15,7 @@ public class ToggleIntake extends InstantCommand {
 
     @Override
     public void initialize() {
-        if (this.intake.getIntakeSpeed() == 0) {
+        if (this.intake.getIntakeSpeed() == IntakeSpeeds.STOPPED.getSpeed()) {
             this.intake.moveIntake(highSpeed);
         } else {
             this.intake.moveIntake(IntakeSpeeds.STOPPED);

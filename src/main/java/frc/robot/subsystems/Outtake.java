@@ -1,20 +1,28 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Servo;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.kOuttake.OuttakePositions;
+import frc.robot.Constants.kOuttake.OuttakeSpeeds;
 
 public class Outtake extends SubsystemBase {
 
-    private Servo servo = new Servo(Constants.kHardwarePorts.kOuttakeServoID);
+    private final VictorSPX outtakeMotor;
 
-    private void setServoAngle(double angle) {
-        servo.setAngle(angle);
+    public Outtake(){
+        outtakeMotor = new VictorSPX(Constants.kHardwarePorts.kOuttakeServoID);
+        outtakeMotor.configFactoryDefault();
     }
 
-    public void setPosition(OuttakePositions position) {
-        setServoAngle(position.getAngle());
+    private void setOuttakeSpeed(final double speed) {
+        outtakeMotor.set(VictorSPXControlMode.PercentOutput, speed);
+
+    }
+
+    public void setOuttakeSpeed(final OuttakeSpeeds position) {
+        setOuttakeSpeed(position.getSpeed());
     }
 
     @Override

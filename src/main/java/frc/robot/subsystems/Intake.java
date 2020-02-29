@@ -1,24 +1,27 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Spark;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kHardwarePorts;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 
 public class Intake extends SubsystemBase {
 
-    private final Spark spark;
+    private final VictorSPX intakeMotor;
 
     public Intake() {
-        spark = new Spark(kHardwarePorts.kIntakeMotorID);
+        intakeMotor = new VictorSPX(kHardwarePorts.kIntakeMotorID);
+        intakeMotor.configFactoryDefault();
     }
 
     public void moveIntake(IntakeSpeeds speed) {
-        spark.set(speed.getSpeed());
+        intakeMotor.set(VictorSPXControlMode.PercentOutput, speed.getSpeed());
     }
 
     public double getIntakeSpeed() {
-        return spark.getSpeed();
+        return intakeMotor.getMotorOutputPercent();
     }
 
     @Override

@@ -65,50 +65,57 @@ public class AdvancedButtons {
 
         return button;
     }
-
-    public static Button buttonToggle(Button button, Command option1, Command option2) {
-        CommandScheduler.getInstance().addButton(new Runnable() {
-
-            private boolean prevButton = false;
-            private int flag = 0;
-
-            @Override
-            public void run() {
-
-                boolean press = button.get();
-
-                if (press) {
-                    if (prevButton != press)
-                        flag++;
-
-                }
-
-
-                if (press == false) {
-
-                    if (flag > 1) {
-                        option1.cancel();
-                        option2.schedule();
-                        System.out.println("option 2 scheduled");
-                        flag = 0;
-                    }
-
-                    
-                    if (flag == 1) {
-                        option1.schedule();
-                        option2.cancel();
-                        System.out.println("option 1 scheduled");
-
-                }
-
-                }
-                prevButton = press;
-            }
-        });
-
-        return button;
-    }
 }
+
+//     public static Button buttonToggle(Button button, Command option1, Command option2) {
+//         CommandScheduler.getInstance().addButton(new Runnable() {
+
+//             private boolean prevButton = false;
+//             private int flag = 0;
+//             private int counterInt = 0;
+
+//             @Override
+//             public void run() {
+
+//                 boolean press = button.get();
+
+//                 if (press) {
+//                     if (prevButton != press)
+//                         flag++;
+
+//                 }
+
+
+//                 if (press == false) {
+                                        
+//                     if (flag == 1) {
+//                         if (counterInt == 1){
+//                             return;
+//                         }
+//                         option1.schedule();
+//                         option2.cancel();
+//                         System.out.println("option 1 scheduled");
+//                         counterInt = 1;
+
+//                     }
+
+//                     if (flag > 1) {
+//                         option1.cancel();
+//                         option2.schedule();
+//                         System.out.println("option 2 scheduled");
+//                         flag = 0;
+//                         counterInt = 0;
+//                     }
+
+
+//                 }
+//                 prevButton = press;
+//             }
+//         });
+
+//         return button;
+//     }
+// }
 // Timer.getFPGATimestamp() to get current time
 
 // You can store the previous button press every cycle, so that you can use both

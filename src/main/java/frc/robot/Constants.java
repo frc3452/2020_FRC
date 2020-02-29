@@ -37,7 +37,7 @@ public final class Constants {
 
         public static final int kOuttakeServoID = 18;
         public static final int kIntakeMotorID = 19;
-//I changed TestSparkMaxID to 7 from 6 to use ID 6 for KRightBackID
+        //I changed TestSparkMaxID to 7 from 6 to use ID 6 for KRightBackID
     }
 
     public static class kXboxButtons {
@@ -72,17 +72,18 @@ public final class Constants {
 
         //
 
-        public static enum OuttakePositions {
-            OPEN(90.0), CLOSED(0.0);
+        public static enum OuttakeSpeeds {
+            RUNNING(-0.5), STOPPED(0.0), BACKWARDS(1.0);
+            /*Used to be OPEN(90.0), CLOSED(0.0) for a servo motor.*/
 
-            private double angle;
+            private double speed;
 
-            private OuttakePositions(double angle) {
-                this.angle = angle;
+            private OuttakeSpeeds(double speed) {
+                this.speed = speed;
             }
 
-            public double getAngle() {
-                return angle;
+            public double getSpeed() {
+                return speed;
             }
 
         };
@@ -92,7 +93,7 @@ public final class Constants {
     public static class kIntake {
         //
         public static enum IntakeSpeeds {
-            BACKWARDS(-.8), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.9);
+            BACKWARDS(-.8), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.8);
 
             private double speed;
 
