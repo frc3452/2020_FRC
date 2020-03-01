@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakeSpeeds;
+import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.intake.NoFinishIntakeCommand;
 import frc.robot.commands.intake.ToggleIntake;
@@ -33,6 +34,8 @@ public class RobotContainer {
     private final DriveTrain m_DriveTrain = new DriveTrain();
     private final Outtake m_outtake = new Outtake();
     private final Intake m_intake = new Intake();
+
+    private final TestAuto testAuto = new TestAuto(m_DriveTrain, 0.5, 0.0, 1.0);
 
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
@@ -59,7 +62,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         driverAButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST));
-        driverXButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS));
+        driverBButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS));
 
         
 
@@ -75,6 +78,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return null;
+
+        return testAuto;
     }
 }
