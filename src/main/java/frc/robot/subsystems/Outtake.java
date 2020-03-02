@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.xml.transform.SourceLocator;
+
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -11,9 +13,10 @@ public class Outtake extends SubsystemBase {
 
     private final VictorSPX outtakeMotor;
 
-    public Outtake(){
+    public Outtake() {
         outtakeMotor = new VictorSPX(Constants.kHardwarePorts.kOuttakeServoID);
         outtakeMotor.configFactoryDefault();
+        outtakeMotor.setInverted(true);
     }
 
     private void setOuttakeSpeed(final double speed) {
@@ -22,6 +25,7 @@ public class Outtake extends SubsystemBase {
     }
 
     public void setOuttakeSpeed(final OuttakeSpeeds position) {
+        System.out.println("Set outtake position: " + position);
         setOuttakeSpeed(position.getSpeed());
     }
 
@@ -29,5 +33,4 @@ public class Outtake extends SubsystemBase {
     public void periodic() {
 
     }
-    // Possibly add a spinny wheel later
 }

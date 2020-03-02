@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class TeleDrive extends CommandBase {
-    private final DriveTrain teleDrive;
+
+	private final DriveTrain teleDrive;
 
     private Supplier<Double> driveSpeed;
 
@@ -36,10 +37,11 @@ public class TeleDrive extends CommandBase {
     public void initialize() {
     }
 
+
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        teleDrive.arcadeDriveControl(driveSpeed.get(), driveRotation.get() *.5, inputsSquare);
+        teleDrive.teleArcadeDriveControl(driveSpeed.get(), driveRotation.get(), inputsSquare);
     }
 
     // Called once the command ends or is interrupted.

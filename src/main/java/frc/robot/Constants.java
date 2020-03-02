@@ -73,7 +73,7 @@ public final class Constants {
         //
 
         public static enum OuttakeSpeeds {
-            RUNNING(-0.5), STOPPED(0.0), BACKWARDS(1.0);
+            RUNNING(0.5), STOPPED(0.0), BACKWARDS(-1.0);
             /*Used to be OPEN(90.0), CLOSED(0.0) for a servo motor.*/
 
             private double speed;
@@ -93,7 +93,7 @@ public final class Constants {
     public static class kIntake {
         //
         public static enum IntakeSpeeds {
-            BACKWARDS(-.8), STOPPED(0.0), SLOW(0.3), MEDIUM(0.5), FAST(0.8);
+            BACKWARDS(-.8), STOPPED(0.0), /*SLOW(0.3), MEDIUM(0.5),*/ FAST(1.0);
 
             private double speed;
 

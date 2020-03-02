@@ -5,17 +5,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.kOuttake.OuttakeSpeeds;
 import frc.robot.subsystems.Outtake;
 
-public class OuttakeCommand extends SequentialCommandGroup {
+public class InstantOuttakeCommand extends SequentialCommandGroup {
 
-    public OuttakeCommand(Outtake outtake, OuttakeSpeeds targetSpeed) {
+    public InstantOuttakeCommand(Outtake outtake, OuttakeSpeeds targetSpeed) {
         addRequirements(outtake);
 
         InstantCommand setPosition = new InstantCommand(() -> { 
             outtake.setOuttakeSpeed(targetSpeed);
         });
-
         
-
         addCommands(setPosition);
     }   
 
