@@ -9,6 +9,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -22,7 +23,7 @@ public class DriveTrain extends SubsystemBase {
      * Creates a new DriveTrain.
      */
 
-    private final WPI_TalonSRX leftfront;
+    private final WPI_TalonSRX leftFront;
     private final WPI_TalonSRX leftMiddle;
     private final WPI_TalonSRX leftBack;
     private final WPI_TalonSRX rightFront;
@@ -34,7 +35,7 @@ public class DriveTrain extends SubsystemBase {
      */
 
     public DriveTrain() {
-        leftfront = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftFrontID);
+        leftFront = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftFrontID);
         leftMiddle = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftMiddleID);
         leftBack = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftBackID);
 
@@ -43,12 +44,20 @@ public class DriveTrain extends SubsystemBase {
         rightBack = new WPI_TalonSRX(Constants.kHardwarePorts.kRightBackID);
 
         // for every talon
-        leftfront.configFactoryDefault();
+        leftFront.configFactoryDefault();
         leftMiddle.configFactoryDefault();
         leftBack.configFactoryDefault();
         rightFront.configFactoryDefault();
         rightMiddle.configFactoryDefault();
         rightBack.configFactoryDefault();
+
+        leftFront.setNeutralMode(NeutralMode.Coast);
+        leftMiddle.setNeutralMode(NeutralMode.Coast);
+        leftBack.setNeutralMode(NeutralMode.Coast);
+        rightFront.setNeutralMode(NeutralMode.Coast);
+        rightMiddle.setNeutralMode(NeutralMode.Coast);
+        rightBack.setNeutralMode(NeutralMode.Coast);
+
 
         // leftfront.setInverted(true);
         // leftMiddle.setInverted(true);
@@ -58,7 +67,7 @@ public class DriveTrain extends SubsystemBase {
         // rightMiddle.setInverted(true);
         // rightBack.setInverted(true);
 
-        final SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftfront, leftMiddle, leftBack);
+        final SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftFront, leftMiddle, leftBack);
         final SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightFront, rightMiddle, rightBack);
 
         differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
@@ -75,40 +84,16 @@ public class DriveTrain extends SubsystemBase {
         }
     }
 
-    public void teleArcadeDriveControl(final double speed, final double rotation, final boolean squareInputs) {
+    public void teleArcadeDriveControl(double speed, double rotation, boolean squareInputs) {
         if (fastMode) {
-            arcadeDriveControl(speed, rotation, squareInputs);
+            arcadeDriveControl(speed, Math.abs(Math.pow(Math.abs(rotation),1.5)) * Math.signum(rotation), false);
         } else {
-            arcadeDriveControl(speed * 0.55, rotation * 0.55, squareInputs);
+            arcadeDriveControl(speed *.55, Math.abs(Math.pow(Math.abs(rotation),1.5)) * Math.signum(rotation) *.55, false);
         }
     }
 
-    // public double getTurningValue(Joystick joystick) {
-    // if(Math.abs(joystick.getValue() < 0.1) return 0;
-    // else return joystick.getValue();
-    // }
-    private double deadbandreturn;
-
-    public double deadband(final double JoystickValue, double DeadbandCutOff) {
-        deadbandreturn = (JoystickValue - // initially in one of two ranges: [DeadbandCutOff,1] or -1,-DeadBandCutOff]
-                (Math.abs(JoystickValue) / JoystickValue // 1 if JoystickValue > 0, -1 if JoystickValue < 0 (abs(x)/x);
-                                                         // could use Math.signum(JoystickValue) instead
-                        * DeadbandCutOff // multiply by the sign so that for >0, it comes out to - (DeadBandCutOff), and
-                                         // for <0 it comes to - (-DeadBandCutOff)
-                )) // now in either [0,1-DeadBandCutOff] or -1+DeadBandCutOff,0]
-                / (1 - DeadbandCutOff); // scale to [0,1] or -1,0]
-        if (JoystickValue < DeadbandCutOff && JoystickValue > (DeadbandCutOff * (-1))) {
-            deadbandreturn = 0;
-        } else {
-            deadbandreturn = (JoystickValue - (Math.abs(JoystickValue) / JoystickValue * DeadbandCutOff))
-                    / (1 - DeadbandCutOff);
-        }
-
-        return deadbandreturn;
-    }
-
-    public void arcadeDriveControl(final double speed, final double rotation, final boolean squareInputs) {
-        differentialDrive.arcadeDrive(speed, rotation/* + deadband(getRawButton, .2)*/, squareInputs);
+    public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
+        differentialDrive.arcadeDrive(speed, rotation, squareInputs);
     }
 
     public void tankDriveControl(final double speed, final double rotation) {
@@ -120,8 +105,8 @@ public class DriveTrain extends SubsystemBase {
 
         // This method will be called once per scheduler run
     }
+
+    public boolean isFastMode() {
+        return fastMode;
+    }
 }
-
-// public class hhh extends CommandBase {
-
-// }

@@ -7,10 +7,10 @@
 
 package frc.robot;
 
-import java.util.List;
-
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -21,17 +21,17 @@ import frc.robot.commands.auto.AutoFeedSomeoneElseCommand;
 import frc.robot.commands.auto.DriveAndWait;
 import frc.robot.commands.auto.DriveFromSideEject;
 import frc.robot.commands.auto.DriveStraightAndEject;
-import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.drive.DriveForTime;
 import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.intake.NoFinishIntakeCommand;
-import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.outtake.NoFinishOuttakeCommand;
-import frc.robot.commands.outtake.InstantOuttakeCommand;
+import frc.robot.subsystems.AccessoryElectronics;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
-import frc.robot.util.AdvancedButtons;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -42,9 +42,10 @@ import frc.robot.util.AdvancedButtons;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private final DriveTrain m_DriveTrain = new DriveTrain();
-    private final Outtake m_outtake = new Outtake();
-    private final Intake m_intake = new Intake();
+    private final DriveTrain m_DriveTrain;
+    private final Outtake m_outtake;
+    private final Intake m_intake;
+    private final AccessoryElectronics electronics;
 
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
     private final Joystick driverJoystick = new Joystick(0);
@@ -58,15 +59,21 @@ public class RobotContainer {
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
 
+    private final ShuffleboardTab sb_tab_main = Shuffleboard.getTab("Main");
+    private final ShuffleboardTab sb_tab_testing = Shuffleboard.getTab("Testing");
+
     private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-    // 0 means slow mode, 1 means fast
-
     public RobotContainer() {
-        // Configure the button bindings
+        m_DriveTrain = new DriveTrain();
+        m_outtake = new Outtake();
+        m_intake = new Intake();
+        electronics = new AccessoryElectronics();
+
         configureDefaultCommands();
         configureButtonBindings();
         addAutosToChooser();
+        configureShuffleboard();
     }
 
     private void configureDefaultCommands() {
@@ -83,9 +90,24 @@ public class RobotContainer {
 
         driverRBButton.whileHeld(new NoFinishOuttakeCommand(m_outtake, OuttakeSpeeds.RUNNING));
         driverLBButton.whileHeld(new NoFinishOuttakeCommand(m_outtake, OuttakeSpeeds.BACKWARDS));
-        // driverRBButton.or(driverLBButton).whenInactive(new OuttakeCommand(m_outtake,
-        // OuttakeSpeeds.STOPPED));
 
+
+        //Give this a try, if you would. You could use the
+        //Shuffleboard.selectTab("...");
+        // in teleInit to have a setup tab, or you could dynamically change tabs whenever you want in the match
+        driverRightStickPress.whenPressed(new InstantCommand() {
+            private AtomicBoolean toggle = new AtomicBoolean();
+
+            @Override
+            public void initialize() {
+                if (toggle.get()) {
+                    Shuffleboard.selectTab("Main");
+                } else {
+                    Shuffleboard.selectTab("Testing");
+                }
+                toggle.set(!toggle.get());
+            }
+        });
     }
 
     private void addAutosToChooser() {
@@ -105,7 +127,16 @@ public class RobotContainer {
                     new AutoFeedSomeoneElseCommand(time, false, m_DriveTrain, m_outtake, m_intake));
         }
 
-        Shuffleboard.getTab("Main").add(m_chooser);
+        sb_tab_main.add(m_chooser).withSize(2, 1).withPosition(2, 0);
+    }
+
+    private void configureShuffleboard() {
+        //m_DriveTrain.isFastMode();
+        sb_tab_main.addBoolean("Fast speed", () -> false).
+                withWidget(BuiltInWidgets.kBooleanBox).
+                withSize(2, 2).withPosition(2, 2);
+
+        sb_tab_testing.add(electronics.getPDP()).withPosition(0, 0);
     }
 
     public Command getAutonomousCommand() {
