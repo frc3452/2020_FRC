@@ -12,7 +12,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -76,8 +75,7 @@ public class DriveTrain extends SubsystemBase {
         }
     }
 
-    public void teleArcadeDriveControl(double speed, double rotation, boolean squareInputs)
-    {
+    public void teleArcadeDriveControl(double speed, double rotation, boolean squareInputs) {
         if (fastMode) {
             arcadeDriveControl(speed, rotation, squareInputs);
         } else {
@@ -86,7 +84,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
-            differentialDrive.arcadeDrive(speed, rotation, squareInputs);
+        differentialDrive.arcadeDrive(speed, rotation, squareInputs);
     }
 
     public void tankDriveControl(double speed, double rotation) {
@@ -95,11 +93,11 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+
         // This method will be called once per scheduler run
     }
+
+    public boolean isFastMode() {
+        return fastMode;
+    }
 }
-
-// public class hhh extends CommandBase {
-
-// }
