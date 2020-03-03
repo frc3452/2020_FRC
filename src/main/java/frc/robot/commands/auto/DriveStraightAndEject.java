@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.kOuttake.OuttakeSpeeds;
 import frc.robot.commands.drive.DriveForTime;
-import frc.robot.commands.outtake.InstantOuttakeCommand;
 import frc.robot.commands.outtake.NoFinishOuttakeCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Outtake;

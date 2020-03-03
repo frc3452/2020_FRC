@@ -93,7 +93,7 @@ public class RobotContainer {
         m_chooser.addOption("Drive Straight", new DriveForTime(m_DriveTrain, 0.5, 0, 3.0));
         m_chooser.addOption("Drive Straight - Eject", new DriveStraightAndEject(m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive From Side & Eject(start on left)", new DriveFromSideEject(true, m_DriveTrain, m_outtake));
-        m_chooser.addOption("Drive From Side & Eject(start on Right)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
+        m_chooser.addOption("Drive From Side & Eject(start on right)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
 
         m_chooser.addOption("Drive For Time & Eject", new DriveAndWait(m_DriveTrain, m_outtake));
 

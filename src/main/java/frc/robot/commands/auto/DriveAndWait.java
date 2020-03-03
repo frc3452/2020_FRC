@@ -9,13 +9,15 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Outtake;
 
 public class DriveAndWait extends SequentialCommandGroup {
-public DriveAndWait(DriveTrain driveTrain, Outtake outtake ) {
+    public DriveAndWait(DriveTrain driveTrain, Outtake outtake) {
 
-addCommands(new DriveForTime(driveTrain, -.3, 0, .3 ));
-addCommands(new WaitCommand(1));
-addCommands(new DriveForTime(driveTrain, -.3, .3, .3));
-addCommands(new WaitCommand(1));
-addCommands(new NoFinishOuttakeCommand(outtake, OuttakeSpeeds.RUNNING).withTimeout(3));
+        addCommands(new DriveForTime(driveTrain, -.3, 0, .3));
+        addCommands(new WaitCommand(1));
+        addCommands(new DriveForTime(driveTrain, -.3, .3, .3));
+        addCommands(new WaitCommand(1));
+        addCommands(new NoFinishOuttakeCommand(outtake, OuttakeSpeeds.RUNNING).withTimeout(3));
+    }
+
 }
 
-}
+// test this one too
