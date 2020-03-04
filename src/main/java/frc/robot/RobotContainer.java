@@ -21,6 +21,8 @@ import frc.robot.commands.auto.AutoFeedSomeoneElseCommand;
 import frc.robot.commands.auto.DriveAndWait;
 import frc.robot.commands.auto.DriveFromSideEject;
 import frc.robot.commands.auto.DriveStraightAndEject;
+import frc.robot.commands.auto.DriveStraightAndEjectShort;
+import frc.robot.commands.auto.DriveStraightEjectAndBackUp;
 import frc.robot.commands.drive.DriveForTime;
 import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.intake.NoFinishIntakeCommand;
@@ -114,6 +116,8 @@ public class RobotContainer {
         m_chooser.setDefaultOption("Default - Drive off line", new DriveForTime(m_DriveTrain, -0.3, 0.2, 3.7));
         m_chooser.addOption("Drive Straight", new DriveForTime(m_DriveTrain, 0.5, 0, 3.0));
         m_chooser.addOption("Drive Straight - Eject", new DriveStraightAndEject(m_DriveTrain, m_outtake));
+        m_chooser.addOption("Drive Straight - Eject - Back Up", new DriveStraightEjectAndBackUp(m_DriveTrain, m_outtake));
+        m_chooser.addOption("Drive Straight - Eject(short)", new DriveStraightAndEjectShort(m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive From Side & Eject(start on left)", new DriveFromSideEject(true, m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive From Side & Eject(start on right)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
 

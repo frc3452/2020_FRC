@@ -9,6 +9,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -58,6 +59,8 @@ public class DriveTrain extends SubsystemBase {
         rightMiddle.setNeutralMode(NeutralMode.Coast);
         rightBack.setNeutralMode(NeutralMode.Coast);
 
+        leftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 400000);
+//these are test numbers    
 
         // leftfront.setInverted(true);
         // leftMiddle.setInverted(true);
