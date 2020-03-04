@@ -7,9 +7,16 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSink;
+import edu.wpi.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.kXboxButtons;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,6 +28,13 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+    UsbCamera camera1;
+    UsbCamera camera2;
+    VideoSink server;
+    private final Joystick driverJoystick = new Joystick(0);
+    private JoystickButton yButton = new JoystickButton(driverJoystick, kXboxButtons.Y);
+    private boolean lastPress = false;
+    private boolean cam1 = true;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -32,6 +46,12 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        camera1 = CameraServer.getInstance().startAutomaticCapture(0);
+        camera2 = CameraServer.getInstance().startAutomaticCapture(1);
+        server = CameraServer.getInstance().getServer();
+    
+        camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     }
 
     /**
@@ -48,6 +68,18 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        if (yButton.get() != lastPress) {
+            if(cam1) {
+            System.out.println("Setting camera 2");
+            server.setSource(camera2);
+            cam1 = false;
+            }
+        } else {
+            System.out.println("Setting camera 1");
+            server.setSource(camera1);
+            cam1 = true;
+        }
+        lastPress = yButton.get();
     }
 
     /**

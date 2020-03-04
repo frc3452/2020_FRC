@@ -117,7 +117,6 @@ public class RobotContainer {
         m_chooser.addOption("Drive From Side & Eject(start on left)", new DriveFromSideEject(true, m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive From Side & Eject(start on right)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
 
-        m_chooser.addOption("Drive For Time & Eject", new DriveAndWait(m_DriveTrain, m_outtake));
 
         List<Double> times = List.of(1.0, 2.0, 3.0, 5.0);
         for (Double time : times) {
