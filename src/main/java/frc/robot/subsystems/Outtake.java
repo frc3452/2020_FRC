@@ -1,19 +1,19 @@
 package frc.robot.subsystems;
 
-import javax.xml.transform.SourceLocator;
-
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.kOuttake.OuttakeSpeeds;
 
 public class Outtake extends SubsystemBase {
 
-    private final VictorSPX outtakeMotor;
+    private VictorSPX outtakeMotor;
 
-    public Outtake() {
+    public Outtake(boolean skipConstruction) {
+        if (skipConstruction) {
+            return;
+        }
         outtakeMotor = new VictorSPX(Constants.kHardwarePorts.kOuttakeServoID);
         outtakeMotor.configFactoryDefault();
         outtakeMotor.setInverted(true);

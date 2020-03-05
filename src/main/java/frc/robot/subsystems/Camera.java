@@ -13,7 +13,10 @@ public class Camera extends SubsystemBase {
     VideoSink server;
 
 
-    public Camera() {
+    public Camera(boolean skipConstruction) {
+        if (skipConstruction) {
+            return;
+        }
         camera1 = CameraServer.getInstance().startAutomaticCapture(0);
         camera2 = CameraServer.getInstance().startAutomaticCapture(1);
         server = CameraServer.getInstance().getServer();

@@ -2,16 +2,18 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kHardwarePorts;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 
 public class Intake extends SubsystemBase {
 
-    private final VictorSPX intakeMotor;
+    private VictorSPX intakeMotor;
 
-    public Intake() {
+    public Intake(boolean skipConstruction) {
+        if (skipConstruction) {
+            return;
+        }
         intakeMotor = new VictorSPX(kHardwarePorts.kIntakeMotorID);
         intakeMotor.configFactoryDefault();
     }

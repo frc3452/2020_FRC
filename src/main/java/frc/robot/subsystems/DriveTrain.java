@@ -9,6 +9,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -16,6 +17,9 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.drive.TestDriveTrain;
+
+import java.util.function.Supplier;
 
 public class DriveTrain extends SubsystemBase {
     DifferentialDrive differentialDrive;
@@ -24,18 +28,30 @@ public class DriveTrain extends SubsystemBase {
      * Creates a new DriveTrain.
      */
 
-    private final WPI_TalonSRX leftFront;
-    private final WPI_TalonSRX leftMiddle;
-    private final WPI_TalonSRX leftBack;
-    private final WPI_TalonSRX rightFront;
-    private final WPI_TalonSRX rightMiddle;
-    private final WPI_TalonSRX rightBack;
+    private WPI_TalonSRX leftFront;
+    private WPI_TalonSRX leftMiddle;
+    private WPI_TalonSRX leftBack;
+    private WPI_TalonSRX rightFront;
+    private WPI_TalonSRX rightMiddle;
+    private WPI_TalonSRX rightBack;
 
-    /*
-     * PWM 1 - PWM 2 - PWM 3 - PWM 4 -
-     */
+    private boolean fastMode = true;
 
-    public DriveTrain() {
+    private String constructionErrors = "";
+    private boolean leftEncoderEverBad = false;
+    private boolean rightEncoderEverBad = false;
+    private final boolean skipConstruction;
+
+    public DriveTrain(boolean skipConstruction) {
+        this.skipConstruction = skipConstruction;
+
+        if (skipConstruction) {
+            constructionErrors += "[Fake drivetrain]";
+            constructionErrors += "[Not real]";
+            constructionErrors += "[An illusion]";
+            return;
+        }
+
         leftFront = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftFrontID);
         leftMiddle = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftMiddleID);
         leftBack = new WPI_TalonSRX(Constants.kHardwarePorts.kLeftBackID);
@@ -59,24 +75,146 @@ public class DriveTrain extends SubsystemBase {
         rightMiddle.setNeutralMode(NeutralMode.Coast);
         rightBack.setNeutralMode(NeutralMode.Coast);
 
-        leftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 400000);
-//these are test numbers    
+        var result = leftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
+        if (result != ErrorCode.OK) {
+            constructionErrors += "[Could not setup left encoder]";
+        }
+        result = rightFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 100);
 
-        // leftfront.setInverted(true);
-        // leftMiddle.setInverted(true);
-        // leftBack.setInverted(true);
+        if (result != ErrorCode.OK) {
+            constructionErrors += "[Could not setup right encoder]";
+        }
 
-        // rightFront.setInverted(true);
-        // rightMiddle.setInverted(true);
-        // rightBack.setInverted(true);
+        if (!leftEncoderValid()) {
+            constructionErrors += "[Left encoder not found]";
+        }
+
+        if (!rightEncoderValid()) {
+            constructionErrors += "[Right encoder not found]";
+        }
 
         final SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftFront, leftMiddle, leftBack);
         final SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightFront, rightMiddle, rightBack);
 
         differentialDrive = new DifferentialDrive(leftMotors, rightMotors);
+        enableMotorSaftey();
     }
 
-    private boolean fastMode = true;
+    public Supplier<String> getErrors() {
+        return () -> constructionErrors;
+    }
+
+    public void runMotor(TestDriveTrain.Motor motor, double speed) {
+        runMotor(motor.getLeft(), motor.getNum(), speed);
+    }
+
+    private double getRPMfromSensor(int sensor) {
+        return (((double) sensor) * (60 * 10)) / (4096.0);
+    }
+
+    public double getLeftRPM() {
+        if (skipConstruction) {
+            return Math.random();
+        }
+
+        return getRPMfromSensor(leftMiddle.getSelectedSensorVelocity());
+    }
+
+    public double getRightRPM() {
+        if (skipConstruction) {
+            return Math.random();
+        }
+        return getRPMfromSensor(rightMiddle.getSelectedSensorVelocity());
+    }
+
+    public void runMotor(boolean left, int num, double speed) {
+        WPI_TalonSRX t = getTalon(left, num);
+        if (t != null) {
+            t.set(speed);
+        } else {
+            System.out.println("Invalid set!");
+        }
+    }
+
+
+    public double getCurrent(boolean left, int num) {
+        var t = getTalon(left, num);
+        if (t == null) {
+            return Math.random();
+        }
+
+        return t.getStatorCurrent();
+    }
+
+    private WPI_TalonSRX getTalon(boolean left, int num) {
+        WPI_TalonSRX t = null;
+        if (left) {
+            if (num == 1) {
+                t = leftFront;
+            } else if (num == 2) {
+                t = leftMiddle;
+            } else if (num == 3) {
+                t = leftBack;
+            }
+        } else {
+            if (num == 1) {
+                t = rightFront;
+            } else if (num == 2) {
+                t = rightMiddle;
+            } else if (num == 3) {
+                t = rightBack;
+            }
+        }
+        return t;
+    }
+
+    public void enableMotorSaftey() {
+        if (!skipConstruction) {
+            differentialDrive.setSafetyEnabled(true);
+        }
+    }
+
+    public void disableMotorSaftey() {
+        if (!skipConstruction) {
+            differentialDrive.setSafetyEnabled(false);
+        }
+    }
+
+    public boolean leftEncoderValid() {
+        if (skipConstruction) {
+            leftEncoderEverBad = true;
+            return false;
+        }
+
+        final boolean actuallyBad = leftFront.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+
+        if (actuallyBad) {
+            leftEncoderEverBad = true;
+        }
+
+        return actuallyBad;
+    }
+
+    public boolean rightEncoderValid() {
+        if (skipConstruction) {
+            rightEncoderEverBad = true;
+            return false;
+        }
+
+        final boolean actuallyBad = rightFront.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+        if (actuallyBad) {
+            rightEncoderEverBad = true;
+        }
+        return actuallyBad;
+    }
+
+    public boolean hasLeftEncoderBeenGood() {
+        return !leftEncoderEverBad;
+    }
+
+    public boolean hasRightEncoderBeenGood() {
+        return !rightEncoderEverBad;
+    }
 
     public void changeMode() {
         fastMode = !fastMode;
@@ -89,23 +227,26 @@ public class DriveTrain extends SubsystemBase {
 
     public void teleArcadeDriveControl(double speed, double rotation, boolean squareInputs) {
         if (fastMode) {
-            arcadeDriveControl(speed, Math.abs(Math.pow(Math.abs(rotation),1.5)) * Math.signum(rotation), false);
+            arcadeDriveControl(speed, Math.abs(Math.pow(Math.abs(rotation), 1.5)) * Math.signum(rotation), false);
         } else {
-            arcadeDriveControl(speed *.55, Math.abs(Math.pow(Math.abs(rotation),1.5)) * Math.signum(rotation) *.55, false);
+            arcadeDriveControl(speed * .55, Math.abs(Math.pow(Math.abs(rotation), 1.5)) * Math.signum(rotation) * .55, false);
         }
     }
 
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
-        differentialDrive.arcadeDrive(speed, rotation, squareInputs);
+        if (skipConstruction) {
+            differentialDrive.arcadeDrive(speed, rotation, squareInputs);
+        }
     }
 
     public void tankDriveControl(final double speed, final double rotation) {
-        differentialDrive.tankDrive(speed, rotation, false);
+        if (skipConstruction) {
+            differentialDrive.tankDrive(speed, rotation, false);
+        }
     }
 
     @Override
     public void periodic() {
-
         // This method will be called once per scheduler run
     }
 

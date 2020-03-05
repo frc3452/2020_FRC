@@ -7,23 +7,23 @@
 
 package frc.robot.commands.drive;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
+import java.util.function.Supplier;
+
 public class TeleDrive extends CommandBase {
 
-	private final DriveTrain teleDrive;
+    private final DriveTrain teleDrive;
 
     private Supplier<Double> driveSpeed;
 
     private Supplier<Double> driveRotation;
-  
+
     private boolean inputsSquare;
 
-    public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation, 
-    boolean squareInputs) {
+    public TeleDrive(DriveTrain driveTrain, Supplier<Double> speed, Supplier<Double> rotation,
+                     boolean squareInputs) {
         teleDrive = driveTrain;
         driveSpeed = speed;
         driveRotation = rotation;
