@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakeSpeeds;
 import frc.robot.commands.auto.AutoFeedSomeoneElseCommand;
-import frc.robot.commands.auto.DriveAndWait;
 import frc.robot.commands.auto.DriveFromSideEject;
 import frc.robot.commands.auto.DriveStraightAndEject;
 import frc.robot.commands.auto.DriveStraightAndEjectShort;
@@ -63,8 +61,6 @@ public class RobotContainer {
             Constants.kXboxButtons.RIGHT_STICK_BUTTON);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
-    private final UsbCamera camera1 = new UsbCamera("Camera 1", 100); // this is a test, I'm not sure what device they'll be yet.
-    private final UsbCamera camera2 = new UsbCamera("Camera 2", 100);
 
     private final ShuffleboardTab sb_tab_main = Shuffleboard.getTab("Main");
     private final ShuffleboardTab sb_tab_testing = Shuffleboard.getTab("Testing");
@@ -92,7 +88,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         driverXButton.whenPressed(new InstantCommand(() -> m_DriveTrain.changeMode()));
-        driverYButton.whenPressed(new InstantCommand(() -> m_camera.changeCameras(camera1, camera2)));
+        driverYButton.whenPressed(new InstantCommand(() -> m_camera.changeCameras()));
 
         driverAButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST));
         driverBButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS));

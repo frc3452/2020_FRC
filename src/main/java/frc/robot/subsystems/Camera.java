@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Camera extends SubsystemBase {
 
-    private UsbCamera camera1;
-    private UsbCamera camera2;
+    private UsbCamera camera1 = new UsbCamera("Camera 2", 111);
+    private UsbCamera camera2 = new UsbCamera("Camera 2", 222); //test numbers
     private boolean cam1 = true;
     VideoSink server;
 
@@ -24,9 +24,8 @@ public class Camera extends SubsystemBase {
     }
 
 
-    public void changeCameras(UsbCamera camera1, UsbCamera camera2) {
-        this.camera1 = camera1;
-        this.camera2 = camera2;
+    public void changeCameras() {
+
         if (cam1) {
             System.out.println("Switching to camera 2");
             server.setSource(camera2);
