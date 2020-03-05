@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,6 +29,7 @@ import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.intake.NoFinishIntakeCommand;
 import frc.robot.commands.outtake.NoFinishOuttakeCommand;
 import frc.robot.subsystems.AccessoryElectronics;
+import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Outtake;
@@ -47,6 +49,7 @@ public class RobotContainer {
     private final DriveTrain m_DriveTrain;
     private final Outtake m_outtake;
     private final Intake m_intake;
+    private final Camera m_camera;
     private final AccessoryElectronics electronics;
 
     // https://docs.wpilib.org/en/latest/docs/software/commandbased/binding-commands-to-triggers.html#binding-a-command-to-a-joystick-button
@@ -60,6 +63,8 @@ public class RobotContainer {
             Constants.kXboxButtons.RIGHT_STICK_BUTTON);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
+    private final UsbCamera camera1 = new UsbCamera("Camera 1", 100); // this is a test, I'm not sure what device they'll be yet.
+    private final UsbCamera camera2 = new UsbCamera("Camera 2", 100);
 
     private final ShuffleboardTab sb_tab_main = Shuffleboard.getTab("Main");
     private final ShuffleboardTab sb_tab_testing = Shuffleboard.getTab("Testing");
@@ -70,6 +75,7 @@ public class RobotContainer {
         m_DriveTrain = new DriveTrain();
         m_outtake = new Outtake();
         m_intake = new Intake();
+        m_camera = new Camera();
         electronics = new AccessoryElectronics();
 
         configureDefaultCommands();
@@ -86,6 +92,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         driverXButton.whenPressed(new InstantCommand(() -> m_DriveTrain.changeMode()));
+        driverYButton.whenPressed(new InstantCommand(() -> m_camera.changeCameras(camera1, camera2)));
 
         driverAButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST));
         driverBButton.whileHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS));
