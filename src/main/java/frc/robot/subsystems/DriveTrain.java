@@ -234,7 +234,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void arcadeDriveControl(double speed, double rotation, boolean squareInputs) {
-        if (skipConstruction) {
+        if (!skipConstruction) {
             differentialDrive.arcadeDrive(speed, rotation, squareInputs);
         }
     }
