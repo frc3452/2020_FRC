@@ -188,7 +188,7 @@ public class DriveTrain extends SubsystemBase {
             leftBack.setSafetyEnabled(enabled);
             rightFront.setSafetyEnabled(enabled);
             rightMiddle.setSafetyEnabled(enabled);
-            leftBack.setSafetyEnabled(enabled);
+            rightBack.setSafetyEnabled(enabled);
         }
     }
 
