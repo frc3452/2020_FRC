@@ -148,7 +148,7 @@ public class RobotContainer {
 
     private void configureShuffleboard() {
         //m_DriveTrain.isFastMode();
-        sb_tab_main.addBoolean("Fast speed", () -> false)
+        sb_tab_main.addBoolean("Fast speed", () -> m_DriveTrain.isFastMode())
                 .withWidget(BuiltInWidgets.kBooleanBox).
                 withSize(2, 2).withPosition(2, 2);
 

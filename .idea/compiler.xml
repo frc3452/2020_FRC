@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="2020_FRC.main" target="11" />
-      <module name="2020_FRC.test" target="11" />
+      <module name="2020_frc.main" target="11" />
+      <module name="2020_frc.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -170,13 +170,25 @@ public class DriveTrain extends SubsystemBase {
 
     public void enableMotorSaftey() {
         if (!skipConstruction) {
-            differentialDrive.setSafetyEnabled(true);
+            setMotorSaftey(true);
         }
     }
 
     public void disableMotorSaftey() {
         if (!skipConstruction) {
-            differentialDrive.setSafetyEnabled(false);
+            setMotorSaftey(false);
+        }
+    }
+
+    private void setMotorSaftey(boolean enabled) {
+        if (!skipConstruction) {
+            differentialDrive.setSafetyEnabled(enabled);
+            leftFront.setSafetyEnabled(enabled);
+            leftMiddle.setSafetyEnabled(enabled);
+            leftBack.setSafetyEnabled(enabled);
+            rightFront.setSafetyEnabled(enabled);
+            rightMiddle.setSafetyEnabled(enabled);
+            leftBack.setSafetyEnabled(enabled);
         }
     }
 
