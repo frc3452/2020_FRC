@@ -198,13 +198,13 @@ public class DriveTrain extends SubsystemBase {
             return false;
         }
 
-        final boolean actuallyBad = leftFront.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+        final boolean good = leftMiddle.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
 
-        if (actuallyBad) {
+        if (!good) {
             leftEncoderEverBad = true;
         }
 
-        return actuallyBad;
+        return good;
     }
 
     public boolean rightEncoderValid() {
@@ -213,11 +213,13 @@ public class DriveTrain extends SubsystemBase {
             return false;
         }
 
-        final boolean actuallyBad = rightFront.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
-        if (actuallyBad) {
+        final boolean good = rightMiddle.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+
+        if (!good) {
             rightEncoderEverBad = true;
         }
-        return actuallyBad;
+
+        return good;
     }
 
     public boolean hasLeftEncoderBeenGood() {
