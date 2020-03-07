@@ -17,10 +17,10 @@ public class AutoFeedSomeoneElseCommand extends SequentialCommandGroup {
     
       if (useOuttake) {
           addCommands(new NoFinishOuttakeCommand(outtake, OuttakeSpeeds.RUNNING).withTimeout(5.0));
-          addCommands(new DriveForTime(driveTrain, 0.7, -.4, .8));
+          addCommands(new DriveForTime(driveTrain, 0.5, -.4, 1.3));
       } else {
           addCommands(new NoFinishIntakeCommand(intake, IntakeSpeeds.BACKWARDS).withTimeout(5.0));
-          addCommands(new DriveForTime(driveTrain, -0.7, .4, .8));
+          addCommands(new DriveForTime(driveTrain, -0.5, -.4, .8));
       }
 
     

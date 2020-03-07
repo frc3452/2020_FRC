@@ -37,6 +37,7 @@ public final class Constants {
 
         public static final int kOuttakeServoID = 18;
         public static final int kIntakeMotorID = 19;
+        public static final int kNerdsClimberServoID = 2;
         //I changed TestSparkMaxID to 7 from 6 to use ID 6 for KRightBackID
     }
 
@@ -68,12 +69,17 @@ public final class Constants {
 
     }
 
+    public static class kIntakeRumble {
+        public static final double intakeForwardRumble = .6;
+        public static final double intakeBackwardRumble = .3;
+    }
+
     public static class kOuttake {
 
         //
 
         public static enum OuttakeSpeeds {
-            RUNNING(0.5), STOPPED(0.0), BACKWARDS(-1.0);
+            RUNNING(1.0), STOPPED(0.0), BACKWARDS(-0.7);
             /*Used to be OPEN(90.0), CLOSED(0.0) for a servo motor.*/
 
             private double speed;
@@ -93,7 +99,7 @@ public final class Constants {
     public static class kIntake {
         //
         public static enum IntakeSpeeds {
-            BACKWARDS(-.8), STOPPED(0.0), /*SLOW(0.3), MEDIUM(0.5),*/ FAST(1.0);
+            BACKWARDS(-.9), STOPPED(0.0), /*SLOW(0.3), MEDIUM(0.5),*/ FAST(1.0);
 
             private double speed;
 

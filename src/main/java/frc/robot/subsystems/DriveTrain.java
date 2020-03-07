@@ -170,13 +170,23 @@ public class DriveTrain extends SubsystemBase {
 
     public void enableMotorSaftey() {
         if (!skipConstruction) {
-            differentialDrive.setSafetyEnabled(true);
+            setSafetyEnabled(true);
         }
+    }
+
+    private void setSafetyEnabled(boolean enabled){
+        differentialDrive.setSafetyEnabled(enabled);
+        leftFront.setSafetyEnabled(enabled);
+        leftMiddle.setSafetyEnabled(enabled); 
+        leftBack.setSafetyEnabled(enabled);
+        rightFront.setSafetyEnabled(enabled);
+        rightMiddle.setSafetyEnabled(enabled);
+        rightBack.setSafetyEnabled(enabled);  
     }
 
     public void disableMotorSaftey() {
         if (!skipConstruction) {
-            differentialDrive.setSafetyEnabled(false);
+            setSafetyEnabled(false);
         }
     }
 
@@ -186,13 +196,13 @@ public class DriveTrain extends SubsystemBase {
             return false;
         }
 
-        final boolean actuallyBad = leftFront.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+        final boolean good = leftMiddle.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
 
-        if (actuallyBad) {
+        if (!good) {
             leftEncoderEverBad = true;
         }
 
-        return actuallyBad;
+        return good;
     }
 
     public boolean rightEncoderValid() {
@@ -201,11 +211,11 @@ public class DriveTrain extends SubsystemBase {
             return false;
         }
 
-        final boolean actuallyBad = rightFront.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
-        if (actuallyBad) {
+        final boolean good = rightMiddle.getSensorCollection().getPulseWidthRiseToFallUs() != 0;
+        if (!good) {
             rightEncoderEverBad = true;
         }
-        return actuallyBad;
+        return good;
     }
 
     public boolean hasLeftEncoderBeenGood() {
@@ -229,7 +239,7 @@ public class DriveTrain extends SubsystemBase {
         if (fastMode) {
             arcadeDriveControl(speed, Math.abs(Math.pow(Math.abs(rotation), 1.5)) * Math.signum(rotation), false);
         } else {
-            arcadeDriveControl(speed * .55, Math.abs(Math.pow(Math.abs(rotation), 1.5)) * Math.signum(rotation) * .55, false);
+            arcadeDriveControl(speed * .55, Math.abs(Math.pow(Math.abs(rotation), 3)) * Math.signum(rotation) * .4, false);
         }
     }
 
@@ -240,7 +250,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void tankDriveControl(final double speed, final double rotation) {
-        if (skipConstruction) {
+        if (!skipConstruction) {
             differentialDrive.tankDrive(speed, rotation, false);
         }
     }
