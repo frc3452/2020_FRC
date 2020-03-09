@@ -26,8 +26,6 @@ import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.drive.TestDriveConfig;
 import frc.robot.commands.drive.TestDriveTrain;
 import frc.robot.commands.intake.NoFinishIntakeCommand;
-import frc.robot.commands.intake.NoFinishRumbleIntakeCommandBackward;
-import frc.robot.commands.intake.NoFinishRumbleIntakeCommandForward;
 import frc.robot.commands.intake.ToggleIntakeWithRumble;
 import frc.robot.commands.outtake.NoFinishOuttakeCommand; 
 import frc.robot.subsystems.*;
@@ -135,8 +133,8 @@ public class RobotContainer {
 
         operatorStart.and(operatorBack).whileActiveOnce(climbCommand);
 
-        driverBack.and(driverStart).whileActiveOnce(climbCommand);
-
+        driverStart.whileActiveContinuous(climbCommand);
+        
 
         //Give this a try, if you would. You could use the
         //Shuffleboard.selectTab("...");
@@ -178,9 +176,8 @@ public class RobotContainer {
         m_chooser.addOption("Drive Straight - Eject", new DriveStraightAndEject(m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive Straight - Eject - Back Up", new DriveStraightEjectAndBackUp(m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive Straight - Eject(short)", new DriveStraightAndEjectShort(m_DriveTrain, m_outtake));
-        m_chooser.addOption("Drive From Side & Eject(start on left)", new DriveFromSideEject(true, m_DriveTrain, m_outtake));
-        m_chooser.addOption("Drive From Side & Eject(start on right)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
-        m_chooser.addOption("Push Someone Else (Untested)", new DriveForTime(m_DriveTrain, 0.7, 0, 8));
+        m_chooser.addOption("Drive From Side & Eject(start on left)(untested)", new DriveFromSideEject(true, m_DriveTrain, m_outtake));
+        m_chooser.addOption("Drive From Side & Eject(start on right)(untested)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
 
 
         List<Double> times = List.of(1.0, 2.0, 3.0, 5.0);
@@ -189,6 +186,13 @@ public class RobotContainer {
                     new AutoFeedSomeoneElseCommand(time, true, m_DriveTrain, m_outtake, m_intake));
             m_chooser.addOption("Eject - Intake (" + time + "s delay) (Nerds)",
                     new AutoFeedSomeoneElseCommand(time, false, m_DriveTrain, m_outtake, m_intake));
+        }
+
+        List<Double> pushSomeoneTimes = List.of(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+        for (Double time : pushSomeoneTimes) {
+            m_chooser.addOption("Push Someone else(toward Outtake with 100% power) for" + time + "s)",
+                    new DriveForTime(m_DriveTrain, -1.0, 0.0, time));
+
         }
         m_chooser.addOption("Test drive train", getDriveTrainTest());
 

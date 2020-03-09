@@ -239,7 +239,7 @@ public class DriveTrain extends SubsystemBase {
         if (fastMode) {
             arcadeDriveControl(speed, Math.abs(Math.pow(Math.abs(rotation), 1.5)) * Math.signum(rotation), false);
         } else {
-            arcadeDriveControl(speed * .55, Math.abs(Math.pow(Math.abs(rotation), 3)) * Math.signum(rotation) * .4, false);
+            arcadeDriveControl(speed * .55, Math.abs(Math.pow(Math.abs(rotation), 1.5)) * Math.signum(rotation) * .4, false);
         }
     }
 
