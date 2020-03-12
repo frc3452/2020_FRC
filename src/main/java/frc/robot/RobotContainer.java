@@ -76,7 +76,6 @@ public class RobotContainer {
     private JoystickButton operatorBack = new JoystickButton(operatorJoystick, Constants.kXboxButtons.LOGO_LEFT);
     private JoystickButton operatorStart = new JoystickButton(operatorJoystick, Constants.kXboxButtons.LOGO_RIGHT);
     
-
     private final ShuffleboardTab sb_tab_main = Shuffleboard.getTab("Main");
     private final ShuffleboardTab sb_tab_testing = Shuffleboard.getTab("Testing");
     private final ShuffleboardTab sb_motor_testing = Shuffleboard.getTab("Motor testing");
