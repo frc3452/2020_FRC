@@ -48,6 +48,7 @@ public class TestDriveTrain extends SequentialCommandGroup {
         });
 
         addCommands(new InstantCommand(drive::enableMotorSaftey));
+        addCommands(new InstantCommand(drive::enableFollower));
     }
 
 

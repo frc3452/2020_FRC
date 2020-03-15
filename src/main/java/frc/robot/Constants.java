@@ -28,7 +28,7 @@ public final class Constants {
         //right middle = 5
         //right back = 6
 
-        public static final int kLeftFrontID = 1; 
+        public static final int kLeftFrontID = 1;
         public static final int kLeftMiddleID = 2;
         public static final int kLeftBackID = 3;
         public static final int kRightFrontID = 4;
@@ -66,7 +66,24 @@ public final class Constants {
     }
 
     public static class kDrive {
+        public static final double kWheelRadiusInches = 3.0;
 
+        //volts / inch
+
+        //2.5
+        //0.2
+        public static final double Old_kP = 2.5;
+        public static final double Old_kD = 0.2;
+
+
+        //.075
+        //0.01
+        public static final double kP = convertGain(Old_kP);
+        public static final double kD = convertGain(Old_kD);
+
+        public static double convertGain(double gain) {
+            return ((gain / 12.0) * 1023) / (2 * Math.PI * kWheelRadiusInches);
+        }
     }
 
     public static class kIntakeRumble {
@@ -92,7 +109,9 @@ public final class Constants {
                 return speed;
             }
 
-        };
+        }
+
+        ;
 
     }
 
@@ -113,5 +132,5 @@ public final class Constants {
         }
     }
 
-    
+
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.kIntake.IntakeSpeeds;
 import frc.robot.Constants.kOuttake.OuttakeSpeeds;
+import frc.robot.commands.JoystickRumble;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.climb.NerdsClimbCommand;
 import frc.robot.commands.drive.DriveForTime;
@@ -26,12 +27,10 @@ import frc.robot.commands.drive.TeleDrive;
 import frc.robot.commands.drive.TestDriveConfig;
 import frc.robot.commands.drive.TestDriveTrain;
 import frc.robot.commands.intake.NoFinishIntakeCommand;
-import frc.robot.commands.intake.ToggleIntakeWithRumble;
-import frc.robot.commands.outtake.NoFinishOuttakeCommand; 
+import frc.robot.commands.outtake.NoFinishOuttakeCommand;
 import frc.robot.subsystems.*;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -63,7 +62,7 @@ public class RobotContainer {
             Constants.kXboxButtons.RIGHT_STICK_BUTTON);
     private JoystickButton driverRBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.RB);
     private JoystickButton driverLBButton = new JoystickButton(driverJoystick, Constants.kXboxButtons.LB);
-    
+
     //operator buttons
     private JoystickButton operatorAButton = new JoystickButton(operatorJoystick, Constants.kXboxButtons.A);
     private JoystickButton operatorBButton = new JoystickButton(operatorJoystick, Constants.kXboxButtons.B);
@@ -75,7 +74,7 @@ public class RobotContainer {
     private JoystickButton operatorLBButton = new JoystickButton(operatorJoystick, Constants.kXboxButtons.LB);
     private JoystickButton operatorBack = new JoystickButton(operatorJoystick, Constants.kXboxButtons.LOGO_LEFT);
     private JoystickButton operatorStart = new JoystickButton(operatorJoystick, Constants.kXboxButtons.LOGO_RIGHT);
-    
+
     private final ShuffleboardTab sb_tab_main = Shuffleboard.getTab("Main");
     private final ShuffleboardTab sb_tab_testing = Shuffleboard.getTab("Testing");
     private final ShuffleboardTab sb_motor_testing = Shuffleboard.getTab("Motor testing");
@@ -90,7 +89,7 @@ public class RobotContainer {
         m_climber = new NerdsClimber();
         m_camera = new Camera(skip);
         electronics = new AccessoryElectronics();
-        
+
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -103,21 +102,22 @@ public class RobotContainer {
         m_DriveTrain.setDefaultCommand(new TeleDrive(m_DriveTrain, () -> -driverJoystick.getRawAxis(1),
                 () -> (driverJoystick.getRawAxis(3) - driverJoystick.getRawAxis(2)), false));
     }
-    
+
     private void configureButtonBindings() {
         //driver controls
         driverXButton.whenPressed(new InstantCommand(() -> m_DriveTrain.changeMode()));
         driverYButton.whenPressed(new InstantCommand(() -> m_camera.changeCameras()));
 
         // driverAButton.toggleWhenActive(new NoFinishRumbleIntakeCommandForward(m_intake, IntakeSpeeds.FAST, driverJoystick));
-        driverAButton.whenPressed(new ToggleIntakeWithRumble(m_intake, IntakeSpeeds.FAST, driverJoystick));
-        driverBButton.whenPressed(new ToggleIntakeWithRumble(m_intake, IntakeSpeeds.BACKWARDS, driverJoystick));
+        driverAButton.whenHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.FAST));
+        driverBButton.whenHeld(new NoFinishIntakeCommand(m_intake, IntakeSpeeds.BACKWARDS));
+        driverAButton.whenHeld(new JoystickRumble(driverJoystick, Constants.kIntakeRumble.intakeForwardRumble));
+        driverBButton.whenHeld(new JoystickRumble(driverJoystick, Constants.kIntakeRumble.intakeBackwardRumble));
 
         driverRBButton.whileHeld(new NoFinishOuttakeCommand(m_outtake, OuttakeSpeeds.RUNNING));
         driverLBButton.whileHeld(new NoFinishOuttakeCommand(m_outtake, OuttakeSpeeds.BACKWARDS));
 
 
-        
         //operator controls
         //operatorXButton.whenPressed(new InstantCommand(() -> m_DriveTrain.changeMode()));
         operatorYButton.whenPressed(new InstantCommand(() -> m_camera.changeCameras()));
@@ -133,40 +133,8 @@ public class RobotContainer {
         operatorStart.and(operatorBack).whileActiveOnce(climbCommand);
 
         driverStart.whileActiveContinuous(climbCommand);
-        
-
-        //Give this a try, if you would. You could use the
-        //Shuffleboard.selectTab("...");
-        // in teleInit to have a setup tab, or you could dynamically change tabs whenever you want in the match
-        // driverRightStickPress.whenPressed(new InstantCommand() {
-        //     private AtomicBoolean toggle = new AtomicBoolean();
-
-        //     @Override
-        //     public void initialize() {
-        //         if (toggle.get()) {
-        //             Shuffleboard.selectTab("Main");
-        //         } else {
-        //             Shuffleboard.selectTab("Testing");
-        //         }
-        //         toggle.set(!toggle.get());
-        //     }
-        // });
-
-        // operatorRightStickPress.whenPressed(new InstantCommand() {
-        //     private AtomicBoolean toggle = new AtomicBoolean();
-
-        //     @Override
-        //     public void initialize() {
-        //         if (toggle.get()) {
-        //             Shuffleboard.selectTab("Main");
-        //         } else {
-        //             Shuffleboard.selectTab("Testing");
-        //         }
-        //         toggle.set(!toggle.get());
-        //     }
-        // });
     }
-    
+
     private void addAutosToChooser() {
         m_chooser.setDefaultOption("Default - Drive off line (turning right)", new DriveForTime(m_DriveTrain, -0.3, 0.1, 3.7));
         m_chooser.addOption("Drive off line (turning left)", new DriveForTime(m_DriveTrain, -0.3, -0.1, 3.7));
@@ -177,7 +145,7 @@ public class RobotContainer {
         m_chooser.addOption("Drive Straight - Eject(short)", new DriveStraightAndEjectShort(m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive From Side & Eject(start on left)(untested)", new DriveFromSideEject(true, m_DriveTrain, m_outtake));
         m_chooser.addOption("Drive From Side & Eject(start on right)(untested)", new DriveFromSideEject(false, m_DriveTrain, m_outtake));
-
+        m_chooser.addOption("Encoder test movement", new EncoderMovementAutoExample(m_DriveTrain));
 
         List<Double> times = List.of(1.0, 2.0, 3.0, 5.0);
         for (Double time : times) {
@@ -233,6 +201,14 @@ public class RobotContainer {
         sb_tab_main.addBoolean("Right Encoder Always Good", m_DriveTrain::hasRightEncoderBeenGood)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .withSize(1, 1).withPosition(8, 1);
+
+        sb_tab_testing.addNumber("Left Enc Velocity", m_DriveTrain::getLeftRPM)
+                .withWidget(BuiltInWidgets.kNumberBar)
+                .withSize(1, 1).withPosition(4, 0);
+
+        sb_tab_testing.addNumber("Right Enc Velocity", m_DriveTrain::getRightRPM)
+                .withWidget(BuiltInWidgets.kNumberBar)
+                .withSize(1, 1).withPosition(5, 0);
 
         sb_tab_testing.add(electronics.getPDP()).withPosition(0, 0);
 

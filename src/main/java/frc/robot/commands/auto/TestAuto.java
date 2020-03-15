@@ -9,7 +9,7 @@ import frc.robot.subsystems.DriveTrain;
 public class TestAuto extends CommandBase {
 
     private DriveTrain driveTrain;
-    private double speed; 
+    private double speed;
     private double rotation;
     private double time;
     private double startTime;
@@ -22,15 +22,17 @@ public class TestAuto extends CommandBase {
         addRequirements(driveTrain);
     }
 
-    @Override 
+    @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-    };
+    }
+
+    ;
 
     @Override
     public void execute() {
         driveTrain.arcadeDriveControl(speed, rotation, false);
-    };
+    }
 
     @Override
     public boolean isFinished() {
@@ -38,5 +40,7 @@ public class TestAuto extends CommandBase {
             return true;
         }
         return false;
-    };
+    }
+
+    ;
 }
