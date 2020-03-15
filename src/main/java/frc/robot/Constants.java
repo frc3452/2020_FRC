@@ -78,8 +78,8 @@ public final class Constants {
 
         //.075
         //0.01
-        public static final double kP = convertGain(Old_kP);
-        public static final double kD = convertGain(Old_kD);
+        public static final double kP = 0.075;
+        public static final double kD = 0.01;
 
         public static double convertGain(double gain) {
             return ((gain / 12.0) * 1023) / (2 * Math.PI * kWheelRadiusInches);
